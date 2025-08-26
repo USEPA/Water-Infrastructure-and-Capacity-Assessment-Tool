@@ -1,0 +1,30 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+.log
+R/CWS_Analysis/01_Import_Data/**/*.csv
+R/Wastewater_Analysis/01_Import_Data/**/*.csv
+Final_Exports_for_App/Wastewater_Files/Archive/
+Final_Exports_for_App/Drinking_Water_Files/Archive/
+R/CWS_Analysis/01_Import_Data/DWSRF/Program_Data/**
+Pop_Weighted_Outputs/
+Input_Data/
+R/**/*.csv
+R/**/*.gpkg
+.ini
+schema.ini
+MIGRATIONTEST_Clean Water_Pop Weighted Calcs_00.R
+MIGRATIONTEST_Drinking Water_Pop Weighted Calcs_00.R
+MIGRATIONTEST_DW_ECHO_Exporter_Data_Manipulation_05_drinking water.Rmd
+MIGRATIONTEST_ECHO_Exporter_Data_Manipulation_04_Clean Water.Rmd
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Buyer_Seller.cpg
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Buyer_Seller.dbf
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Buyer_Seller.dbf.xml
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.cpg
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.dbf
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.prj
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.shp
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.shp.xml
+R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.shx
