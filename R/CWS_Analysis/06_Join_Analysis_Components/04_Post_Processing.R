@@ -12,6 +12,16 @@ final_CWS_dataset_with_DWSRF <- st_read(here("R/CWS_Analysis/06_Join_Analysis_Co
 
 # Final cleaning operations ----
 
+## Remove paragraph before DFR URL ----
+final_CWS_dataset_with_DWSRF$DFR_URL <- gsub("^\\n", "", final_CWS_dataset_with_DWSRF$DFR_URL)
+
+## Set POSIXct date class ----
+final_CWS_dataset_with_DWSRF <- final_CWS_dataset_with_DWSRF %>%
+  mutate(
+    OUTSTANDING_PERFORM_BEGIN_DATE =  as.POSIXct.Date(final_CWS_dataset_with_DWSRF$OUTSTANDING_PERFORM_BEGIN_DATE, tz = "UTC"),
+    VISIT_DATE = as.POSIXct.Date(final_CWS_dataset_with_DWSRF$VISIT_DATE, tz = "UTC")
+     )
+
 ## Add "Region" to Region Column ----
 final_CWS_dataset_with_DWSRF$EPA_REGION <-
   paste("Region",
@@ -117,24 +127,24 @@ final_CWS_dataset_with_DWSRF_final_cols <-
     "TRIBE_SERVED" = "TRIBAL_NAME", #previous TRIBE_SERVED_SDWIS,
     "BIA_TRIBE_CODE" = "TRIBAL_CODE",
     "STATE_DWSRF_DAC" = "DISADVANTAGED_ASSISTANCE" #previously DISADVANTAGED_ASSISTANCE
-  ) %>% mutate(
-    REGISTRY_ID = as.numeric(REGISTRY_ID), # Ensure REGISTRY_ID is character
-  )
+  ) #%>% mutate(
+  #   REGISTRY_ID = as.numeric(REGISTRY_ID), # Ensure REGISTRY_ID is character
+  # )
 
 ##  Check for blanks and NA values ----
-blank_count <-
-  as.matrix(as.character(final_CWS_dataset_with_DWSRF_final_cols == ""))
-
-blank_counts <-
-  colSums(blank_count == "")
-
-na_count <-
-  colSums(is.na(final_CWS_dataset_with_DWSRF_final_cols))
-
-summary_df <-
-  data.frame(Blank_count = blank_counts, NA_Count = na_count)
-
-View(summary_df)
+# blank_count <-
+#   as.matrix(as.character(final_CWS_dataset_with_DWSRF_final_cols == ""))
+# 
+# blank_counts <-
+#   colSums(blank_count == "")
+# 
+# na_count <-
+#   colSums(is.na(final_CWS_dataset_with_DWSRF_final_cols))
+# 
+# summary_df <-
+#   data.frame(Blank_count = blank_counts, NA_Count = na_count)
+# 
+# View(summary_df)
 
 ## Populate blank/NA cells ----
 
@@ -158,7 +168,7 @@ final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs <-
       (is.na(TRIBE_SERVED) & PRIMACY_TYPE == "TRIBAL")  ~ paste("Data not available"),
       TRUE ~  as.character(TRIBE_SERVED)
     ),
-    TRIBE_SERVED = case_when( 
+    TRIBE_SERVED = case_when(
       (is.na(TRIBE_SERVED) & PRIMACY_TYPE != "TRIBAL")  ~ paste("Data not applicable"),
       TRUE ~  as.character(TRIBE_SERVED)
     ),
@@ -166,7 +176,7 @@ final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs <-
       (is.na(BIA_TRIBE_CODE) & PRIMACY_TYPE == "TRIBAL")  ~ paste("Data not available"),
       TRUE ~  as.character(BIA_TRIBE_CODE)
     ),
-    BIA_TRIBE_CODE = case_when( 
+    BIA_TRIBE_CODE = case_when(
       (is.na(BIA_TRIBE_CODE) & PRIMACY_TYPE != "TRIBAL")  ~ paste("Data not applicable"),
       TRUE ~  as.character(BIA_TRIBE_CODE)
     ),
@@ -197,19 +207,19 @@ final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs <-
 )
 
 # Check for blanks/NAs
-blank_count <-
-  as.matrix(as.character(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs == ""))
-
-blank_counts <-
-  colSums(blank_count == "")
-
-na_count <-
-  colSums(is.na(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs))
-
-summary_df <-
-  data.frame(Blank_count = blank_counts, NA_Count = na_count)
-
-View(summary_df)
+# blank_count <-
+#   as.matrix(as.character(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs == ""))
+# 
+# blank_counts <-
+#   colSums(blank_count == "")
+# 
+# na_count <-
+#   colSums(is.na(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs))
+# 
+# summary_df <-
+#   data.frame(Blank_count = blank_counts, NA_Count = na_count)
+# 
+# View(summary_df)
 
 # Export ----
 ## With geometry ----

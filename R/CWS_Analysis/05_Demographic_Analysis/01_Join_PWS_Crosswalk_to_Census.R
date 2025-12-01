@@ -1,7 +1,9 @@
 library(dplyr)
 library(vroom)
 library(here)
+library(stringr)
 library(data.table)
+options(scipen = 999)
 
 # This script imports census block and block group data and the PWS crosswalk table. It then joins the PWS-Crosswalk table with census block population data and ACS demographic data to calculate population-weighted averages for various demographic fields.
 
@@ -143,27 +145,29 @@ ACS_BG_Socioeconomic <-
 
 ## Community Water System Service Area Crosswalk Table ----
 
-# Import the Community Water System Service Area Crosswalk Table.This file is a crosswalk between PWSID and all intersecting census blocks. This is the central table that will be used to calculate building weighted averages for the various demographic data. This PWS-Census Block crosswalk table was obtained from USEPA's Office of Research and Development. The service area boundary source data and technical documentation can be found here: https://gispub.epa.gov/serviceareas (note this technical documentation does not include discussion of the crosswalk table, just the development of the boundaries themselves).
+# Import the Community Water System Service Area Crosswalk Table from github. This file is a crosswalk between PWSID and all intersecting census blocks. This is the central table that will be used to calculate building weighted averages for the various demographic data. This PWS-Census Block crosswalk table was obtained from USEPA's Office of Research and Development. The service area boundary source data and technical documentation can be found here: https://gispub.epa.gov/serviceareas (note this technical documentation does not include discussion of the crosswalk table, just the development of the boundaries themselves).
 
-blocks_pws <-
-  vroom(
-    here(
-      "Input_Data/Census/PWS-Crosswalk/All_Blocks_1DOT2.csv")
-  ) %>%
-  mutate(
-    blk_fips =
-      paste0(
-        substr(.$GISJOIN, 2, 3),
-        substr(.$GISJOIN, 5, 7),
-        substr(.$GISJOIN, 9, 18) #Create block FIPS code column
-      ),
-    bg_fips =
-      paste0(
-        substr(.$GISJOIN, 2, 3),
-        substr(.$GISJOIN, 5, 7),
-        substr(.$GISJOIN, 9, 15) #Create block group FIPS code column
-      )
-  )
+blocks_pws <- read.csv("https://media.githubusercontent.com/media/USEPA/ORD_SAB_Model/refs/heads/main/Version_History/2_0/Census_Tables/Blocks_V_2_0.csv")
+
+# blocks_pws <-
+#   vroom(
+#     here(
+#       "Input_Data/Census/PWS-Crosswalk/All_Blocks_1DOT2.csv")
+#   ) %>%
+#   mutate(
+#     blk_fips =
+#       paste0(
+#         substr(.$GISJOIN, 2, 3),
+#         substr(.$GISJOIN, 5, 7),
+#         substr(.$GISJOIN, 9, 18) #Create block FIPS code column
+#       ),
+#     bg_fips =
+#       paste0(
+#         substr(.$GISJOIN, 2, 3),
+#         substr(.$GISJOIN, 5, 7),
+#         substr(.$GISJOIN, 9, 15) #Create block group FIPS code column
+#       )
+#   )
 
 # Join Demographic Data to Crosswalk Table ----
 ## Block population and Urban/Rural Data ----
@@ -174,7 +178,8 @@ blocks_pws_join <-
         #PWSID-Census Block Crosswalk Table
         census_blk_pop_data,
         #Census Block Table (which includes the population and additional census block level data fields)
-        by = "blk_fips",
+        # by = "blk_fips",
+        by.x = "GEOID20", by.y = "GEOCODE",
         all.x = TRUE) %>%
   mutate(pop_ovlp = Bldg_Weight * U7H001,
          #U7H001 is census block population. Calculate the population of each block that overlaps with a PWS
@@ -186,8 +191,16 @@ sum(is.na(blocks_pws_join$U7H001))
 ## Block group ACS Data ----
 
 # Join with ACS BG data. 
+blocks_pws_join_blkgrp_add <- blocks_pws_join %>%
+    mutate(
+      bg_fips =
+        paste0(
+          substr(.$blk_fips , 1, 12)
+        )
+    )
+
 blocks_pws_with_ACS <-
-  merge(blocks_pws_join[, c(
+  merge(blocks_pws_join_blkgrp_add[, c(
     "PWSID",
     "STATE",
     "blk_fips",

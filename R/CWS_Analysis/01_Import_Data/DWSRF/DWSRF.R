@@ -14,14 +14,14 @@ DWSRF_History <-
     1
   )
 
-C:/Users/cneely01/git/WaterICAT_test/WaterICAT/R/Wastewater_Analysis/DW01_Import_Data/CWSRF/Program_Data
-
 # Formatting -----------------------
 names(DWSRF_History) <- gsub(" ", "_", names(DWSRF_History)) #remove spaces
 
 DWSRF_History_Subset <- DWSRF_History %>%
   filter(., Current_Agreement_Type == "Initial Agreement") %>% # Only include initial agreements 
   dplyr::select(PWSID, Disadvantaged_Assistance, Current_Agreement_Type, Initial_Agreement_Date)
+
+# Note - if selection fails. Check column header formatted in source file.
   
 # Export -----------------------
 write.csv(DWSRF_History_Subset, here("Input_Data/DWSRF/DWSRF_History.csv"), row.names = FALSE)

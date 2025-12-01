@@ -47,9 +47,10 @@ echo_NPDES_SE_VIOLATIONS <- dbGetQuery(con, echo_NPDES_SE_VIOLATIONS_query)
 # Create FYQTR column
 echo_NPDES_SE_VIOLATIONS_FORMATTED <-
   echo_NPDES_SE_VIOLATIONS %>%
-  mutate(SINGLE_EVENT_VIOLATION_DATE = as.Date(SINGLE_EVENT_VIOLATION_DATE, format = "%Y/%m/%d")) %>%
-      mutate(FYQTR = as.yearqtr(SINGLE_EVENT_VIOLATION_DATE) + .25
-      ) 
+  # mutate(SINGLE_EVENT_VIOLATION_DATE = as.Date(SINGLE_EVENT_VIOLATION_DATE, format = "%Y/%m/%d")) %>% # if the date format below doesn't work, try this one.
+ mutate(SINGLE_EVENT_VIOLATION_DATE = as.Date(SINGLE_EVENT_VIOLATION_DATE, format = "%d-%b-%y")) %>% 
+   mutate(FYQTR = as.yearqtr(SINGLE_EVENT_VIOLATION_DATE) + .25
+  )
 
 # Filter for all violations that occurred BEFORE Q13
 echo_NPDES_SE_VIOLATIONS_FORMATTED <- echo_NPDES_SE_VIOLATIONS_FORMATTED %>%

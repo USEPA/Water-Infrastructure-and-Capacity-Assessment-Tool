@@ -15,10 +15,6 @@ db <- Sys.getenv("ECHO_DB")
 uid <- Sys.getenv("ECHO_uid")
 pwd <- Sys.getenv("ECHO_pwd")
 
-FYQTR_NPDES <- Sys.getenv("FYQTR_NPDES") # Import the "FYQTR" to run SQL query
-npdes_set_fyqtr <- Sys.getenv("npdes_set_fyqtr") # Import the "FY QTR" to filter data
-npdes_set_fyqtr <- as.yearqtr(npdes_set_fyqtr) # Convert to a yearqtr class
-
 con <- dbConnect(odbc::odbc(),
                  dsn = db,
                  uid = uid,

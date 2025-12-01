@@ -17,7 +17,7 @@ channel_SDWIS <- odbcConnect(db_sdwis, uid_sdiws, pwd_sdwis)
 # Set-up Query -------------------------
 
 # Load compliance period begin date
-load(here("R/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
+load(here("R/CWS_Analysis/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
 
 # Set up query
 violations_query <- paste(
@@ -49,11 +49,15 @@ SDWIS_VIOLATIONS_BASE$FYQTR <- SDWIS_VIOLATIONS_BASE$FYQTR + .25
 SDWIS_VIOLATIONS_BASE <- SDWIS_VIOLATIONS_BASE %>%
   filter(., FYQTR <= j)
 
-## Convert codes to full text ------------------------
-# Load SDWA reference codes
-SDWA_ref_codes <- vroom(
-  here("Input_Data/SDWIS", "SDWA_REF_CODE_VALUES.csv")
-)
+## Convert codes to full text----
+### Set up query ----
+SDWA_ref_codes_query <- paste(
+  "SELECT *
+  FROM REF_CODE_VALUE
+  ")
+
+### Run query ----
+SDWA_ref_codes <- sqlQuery(channel_SDWIS,SDWA_ref_codes_query)
 
 # Rule Code
 SDWIS_VIOLATIONS_BASE <-

@@ -1,13 +1,13 @@
 library(vroom)
 library(dplyr)
 library(here)
-# This script imports an effluent parameter crosswalk table from the EPA ECHO websit: https://echo.epa.gov/trends/loading-tool/resources#pollutant
+# This script imports an effluent parameter crosswalk table from the EPA ECHO website: https://echo.epa.gov/trends/loading-tool/resources#pollutant
 # NPDES DMR Parameters
 # Select a link to download the parameter and pollutant category lists. The files are refreshed weekly.
 # NPDES DMR Parameter to Pollutant Category Crosswalk (CSV) (640 K) - List of DMR parameters from ICIS-NPDES and associated pollutant categories are designated by "Y" flag. This crosswalk is used by the ECHO Wastewater Facility Search and DMR Exceedances Search.
 
 # Import Effluent Parameter Crosswalk ----
-effluent_crosswalk <-
+effluent_crosswalk <- 
   vroom(here("R/Wastewater_Analysis/01_Import_Data/NPDES/REF_POLLUTANT_PARAMETER.csv")) 
 
 # Function to replace "Y" values with the column header

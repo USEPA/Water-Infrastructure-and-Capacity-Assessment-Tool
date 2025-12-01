@@ -3,20 +3,18 @@ library(zoo)
 library(lubridate)
 library(dplyr)
 library(vroom)
-library(DBI)
-library(odbc)
+library(RODBC)
 
 # This script is used to import significant noncompliance data in the current quarter and last 3-years/12-qtrs.
+
+# Set-up Query ----
 
 # Create db connections and import environment variables ----
 db <- Sys.getenv("ECHO_DB")
 uid <- Sys.getenv("ECHO_uid")
 pwd <- Sys.getenv("ECHO_pwd")
 
-con <- dbConnect(odbc::odbc(),
-                 dsn = db,
-                 uid = uid,
-                 pwd = pwd)
+channel_ECHO <- odbcConnect(db, uid, pwd)
 
 # Set up and run query ----
 SNC_query <- paste(
@@ -28,7 +26,8 @@ SNC_query <- paste(
   "
 )
 
-POTWS_WITH_SNC <- dbGetQuery(con, SNC_query) 
+# POTWS_WITH_SNC <- dbGetQuery(con, SNC_query) 
+POTWS_WITH_SNC <- sqlQuery(channel_ECHO, SNC_query) 
 
 # Select only distinct POTWs
 POTWS_WITH_SNC_DISTINCT <- POTWS_WITH_SNC %>%

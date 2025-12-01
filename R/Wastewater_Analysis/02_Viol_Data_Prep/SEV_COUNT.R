@@ -6,7 +6,7 @@ library(zoo)
 # This script counts the number of SNCs by NPDES ID open as of the most current reporting period AND the number of quarters in the last 3-yrs with at least 1 SNC.
 
 # Import data
-SNC <- vroom(here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"))
+SEV_NPDES <- vroom(here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"))
 # npdes_set_fyqtr <- Sys.getenv("npdes_set_fyqtr") # Import the "FY QTR" to filter data
 # FY_QTR <- as.yearqtr(npdes_set_fyqtr) # Convert to a yearqtr class
 

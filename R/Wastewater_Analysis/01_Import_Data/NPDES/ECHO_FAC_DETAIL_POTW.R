@@ -37,7 +37,7 @@ ECHO_FAC_DETAILS <- vroom(here(
 # # Set up and run query ----
 # ECHO_FAC_DETAILS_QUERY <- paste(
 #   "SELECT NPDES_IDS, DFR_URL, REGISTRY_ID
-#     FROM ECHO_DFR.V_ECHO_EXPORTER13_DL
+#     FROM ECHO_DFR.V_ECHO_EXPORTER
 #     WHERE
 #      NPDES_FLAG = 'Y'
 #       AND FAC_ACTIVE_FLAG = 'Y'"

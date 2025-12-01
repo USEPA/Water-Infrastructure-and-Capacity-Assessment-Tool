@@ -16,7 +16,7 @@ channel_SDWIS <- odbcConnect(db_sdwis, uid_sdiws, pwd_sdwis)
 # Set-up and Execute Queries -------------------------
 
 # Load compliance period begin date
-load(here("R/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
+load(here("R/CWS_Analysis/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
 
 ## Query to obtain sample results >= 0.0100 mg/L  -------------------------
 LTST_LCR_SAMPLE_RESULT_QUERY <- paste(

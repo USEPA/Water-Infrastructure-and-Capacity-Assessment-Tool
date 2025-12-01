@@ -19,7 +19,7 @@ channel_SDWIS <- odbcConnect(db_sdwis, uid_sdiws, pwd_sdwis)
 # Import data -------------------------
 
 # Load compliance period begin date
-load("R/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata")
+load(here("R/CWS_Analysis/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
 
 # Set up query
 SDWA_site_visits_query <- paste(

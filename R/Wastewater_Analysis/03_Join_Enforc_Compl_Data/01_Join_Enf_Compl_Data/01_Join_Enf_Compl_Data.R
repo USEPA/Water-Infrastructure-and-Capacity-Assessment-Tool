@@ -4,6 +4,7 @@ library(zoo)
 library(dplyr)
 
 # Import data ----
+options(scipen = 999)
 
 ## Import active NPDES Facilities ----
 NPDES_ACTIVE <- vroom(here("Input_Data/NPDES/ECHO_ACTIVE_POTW.csv")) %>%
@@ -22,16 +23,18 @@ NPDES_ACTIVE <- vroom(here("Input_Data/NPDES/ECHO_ACTIVE_POTW.csv")) %>%
     "ACTUAL_AVERAGE_FLOW_NMBR"
   )
   
-ECHO_FACILITY_DETAIL <- vroom(here("Input_Data/ECHO/ECHO_FAC_DETAILS_POTW.csv")) 
-ECHO_FACILITY_DETAIL$REGISTRY_ID <- format(ECHO_FACILITY_DETAIL$REGISTRY_ID, scientific = FALSE) # Remove scientific notation
+ECHO_FACILITY_DETAIL <- vroom(here("Input_Data/NPDES/ECHO_FAC_DETAILS_POTW.csv")) 
+#ECHO_FACILITY_DETAIL$REGISTRY_ID <- format(ECHO_FACILITY_DETAIL$REGISTRY_ID, scientific = FALSE) # Remove scientific notation
 
 ## Import all enforcement and compliance data ----
 
 # Create list of enforcement and compliance related .csv files that will be joined
 POTW_enf_compl_dfs_directory <- here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data") # Define directory containing .csv filepath
 
-POTW_enf_compl_files <- list.files(path = POTW_enf_compl_dfs_directory, pattern = "\\.csv$", full.names = TRUE) %>% # List all .csv files in the directory
-append(here("Input_Data/NPDES/NPDES_LTST_COMPL_STATUS.csv")) %>%
+POTW_enf_compl_files <- list.files(path = POTW_enf_compl_dfs_directory,
+                                   pattern = "\\.csv$",
+                                   full.names = TRUE) %>% # List all .csv files in the directory
+  append(here("Input_Data/NPDES/NPDES_LTST_COMPL_STATUS.csv")) %>%
   append(here("Input_Data/NPDES/NPDES_FACILITY_INFO.csv")) %>%
   append(here("Input_Data/NPDES/POTWS_WITH_SNC.CSV")) %>%
   print(.) # Print the list of files to the console

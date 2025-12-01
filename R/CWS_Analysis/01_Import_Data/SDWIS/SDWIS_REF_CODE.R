@@ -17,4 +17,4 @@ SDWIS_REF_CODE_QUERY <- paste(
 #Run query
 SDWIS_REF_CODE <- sqlQuery(channel_SDWIS,SDWIS_REF_CODE_QUERY)
 
-write.csv(SDWIS_REF_CODE, here("Input_Data", "SDWA_REF_CODE_VALUES.csv"), row.names = FALSE)
+write.csv(SDWIS_REF_CODE, here("Input_Data/SDWIS", "SDWA_REF_CODE_VALUES.csv"), row.names = FALSE)

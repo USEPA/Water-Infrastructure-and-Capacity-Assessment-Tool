@@ -4,6 +4,7 @@ library(dplyr)
 
 # This script conducts final post-processing steps for the weighted demographic data at 1/3/5mi POTW buffers.
 
+options(scipen = 999)
 # Import data ----
 
 POTW_Weighted_Demog <- vroom(
@@ -73,59 +74,69 @@ POTWs_with_Demog_data_135mi_ranges <-
                             labels)
 
 # Convert numb values to a 0-100 scale
-# POTW_1_3_5mi_Demog_data <- POTW_1_3_5mi_Demog_data %>%
-#   mutate_at(chr_to_num_census_2digits, ~ round(., digits = 3)) %>%
-#   mutate(
-#     pct_lowinc_5mi =  pct_lowinc_5mi * 100 ,
-#     pct_hsed_5mi  = pct_hsed_5mi * 100 ,
-#     pct_unemply_5mi = pct_unemply_5mi * 100 ,
-#     pct_rural_5mi = pct_rural_5mi * 100,
-#     pct_lowinc_3mi = pct_lowinc_3mi * 100 ,
-#     pct_hsed_3mi = pct_hsed_3mi * 100 ,
-#     pct_unemply_3mi = pct_unemply_3mi * 100,
-#     pct_rural_3mi = pct_rural_3mi * 100,
-#     pct_lowinc_1mi  = pct_lowinc_1mi * 100 ,
-#     pct_hsed_1mi  = pct_hsed_1mi * 100,
-#     pct_unemply_1mi = pct_unemply_1mi * 100,
-#     pct_rural_1mi = pct_rural_1mi * 100
-#   ) %>%
-#   mutate_at(
-#     chr_to_num_census_2digits,
-#     ~ round(as.numeric(.), digits = 3)
-#   )
+POTW_1_3_5mi_Demog_data <- POTWs_with_Demog_data_135mi_ranges %>%
+  #mutate_at(pct_cols_for_ranges, ~ round(., digits = 3)) %>%
+  mutate(
+    pct_lowinc_5mi =  pct_lowinc_5mi * 100 ,
+    pct_hsed_5mi  = pct_hsed_5mi * 100 ,
+    pct_unemply_5mi = pct_unemply_5mi * 100 ,
+    pct_rural_5mi = pct_rural_5mi * 100,
+    pct_lowinc_3mi = pct_lowinc_3mi * 100 ,
+    pct_hsed_3mi = pct_hsed_3mi * 100 ,
+    pct_unemply_3mi = pct_unemply_3mi * 100,
+    pct_rural_3mi = pct_rural_3mi * 100,
+    pct_lowinc_1mi  = pct_lowinc_1mi * 100 ,
+    pct_hsed_1mi  = pct_hsed_1mi * 100,
+    pct_unemply_1mi = pct_unemply_1mi * 100,
+    pct_rural_1mi = pct_rural_1mi * 100
+  ) %>%
+  mutate_at(
+    pct_cols_for_ranges,
+    ~ round(., digits = 2)
+  )
 
 # Final column selection ----
-POTWs_with_Demog_data_135mi_ranges <-
-  POTWs_with_Demog_data_135mi_ranges %>%
+POTW_1_3_5mi_Demog_data_formatted <-
+  POTW_1_3_5mi_Demog_data %>%
   dplyr::select(
     c(
       "NPDES_ID",
-      "STATE",
-      "potw_pop_1mi",
-      "pop_lowinc_1mi",
+      #"STATE",
+      #"potw_pop_1mi",
+      #"pop_lowinc_1mi",
+      "pct_lowinc_1mi",
       "pct_lowinc_1mi_range",
-      "pop_unemply_1mi",
+      "pct_unemply_1mi",
+      #"pop_unemply_1mi",
       "pct_unemply_1mi_range",
-      "pop_rural_1mi",
+      "pct_rural_1mi",
+      #"pop_rural_1mi",
       "pct_rural_1mi_range",
-      "potw_mhi_1mi",
+      #"potw_mhi_1mi",
       "mhi_weighted_1mi",
-      "potw_pop_3mi",
-      "pop_lowinc_3mi",
+      #"potw_pop_3mi",
+      #"pop_lowinc_3mi",
+      "pct_lowinc_3mi",
       "pct_lowinc_3mi_range",
-      "pop_unemply_3mi",
+      #"pop_unemply_3mi",
+      "pct_unemply_3mi",
       "pct_unemply_3mi_range",
-      "pop_rural_3mi",
+      "pct_rural_3mi",
+      #"pop_rural_3mi",
       "pct_rural_3mi_range",
-      "potw_mhi_3mi",
+      #"potw_mhi_3mi",
       "mhi_weighted_3mi",
-      "potw_pop_5mi",
-      "pop_lowinc_5mi",
+     # "potw_pop_5mi",
+      #"pop_lowinc_5mi",
+     "pct_lowinc_5mi",
       "pct_lowinc_5mi_range",
-      "pop_unemply_5mi",
+      #"pop_unemply_5mi",
+     "pct_unemply_5mi",
       "pct_unemply_5mi_range",
-      "pop_rural_5mi",
-      "pct_rural_5mi_range"
+      #"pop_rural_5mi",
+     "pct_rural_5mi",
+      "pct_rural_5mi_range", 
+      "mhi_weighted_5mi"
     )
   )
 
@@ -142,7 +153,7 @@ csvFileName <-
   )
 
 vroom_write(
-  POTWs_with_Demog_data_135mi_ranges,
+  POTW_1_3_5mi_Demog_data_formatted,
   here(csvFileName),
   delim = ",",
   col_names = TRUE

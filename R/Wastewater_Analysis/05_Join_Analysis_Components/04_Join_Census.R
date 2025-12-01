@@ -10,7 +10,7 @@ library(sf)
 NPDES_VIOL <- vroom(here("R/Wastewater_Analysis/05_Join_Analysis_Components/POTW_VIOL_LAGOON_CWSRF_CSO_OUT.csv"))
 
 # Population weighted census data
-Pop_Weighted_Census <- vroom(here("R/Wastewater_Analysis/04_Demographic_Analysis/POTW_with_Cleaned_Demographic_data_2025-06-12_FINAL_OUTPUT.csv"))
+Pop_Weighted_Census <- vroom(here("R/Wastewater_Analysis/04_Demographic_Analysis/POTW_with_Cleaned_Demographic_data_2025-11-20_FINAL_OUTPUT.csv"))
 
 # Join Data ----
 NPDES_VIOL_CENSUS <- merge(NPDES_VIOL,

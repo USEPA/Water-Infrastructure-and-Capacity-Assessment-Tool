@@ -39,6 +39,7 @@ DMR_Viol_D90_D80 <- dbGetQuery(con, DMR_Viol_D90_D80_query)
 # Set date class
 DMR_Viol_D90_D80_formatted <- DMR_Viol_D90_D80 %>%
   mutate(MONITORING_PERIOD_END_DATE = as.Date(MONITORING_PERIOD_END_DATE, "%m/%d/%Y"))
+  #mutate(MONITORING_PERIOD_END_DATE = as.Date(MONITORING_PERIOD_END_DATE, "%d-%b-%y")) 
 
 # Create a FYQTR column  
 DMR_Viol_D90_D80_formatted$FYQTR <- as.yearqtr(DMR_Viol_D90_D80_formatted$MONITORING_PERIOD_END_DATE) 

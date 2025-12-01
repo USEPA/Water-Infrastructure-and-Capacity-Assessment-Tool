@@ -17,9 +17,10 @@ enforcement_priority_query <- paste(
   "SELECT *
   FROM ECHO_DFR.SDWIS_SYSTEMS
   WHERE
-   CURR_SNC  = 'Enforcement Priority'
-    AND PWS_TYPE_CODE = 'CWS'
-    AND PWS_ACTIVITY_CODE = 'A'"
+   CURR_SNC  = 'Enforcement Priority' AND
+     PWS_TYPE_CODE = 'CWS' AND
+     PWS_ACTIVITY_CODE = 'A'
+  "
 )
 
 # Run query ---------------------------

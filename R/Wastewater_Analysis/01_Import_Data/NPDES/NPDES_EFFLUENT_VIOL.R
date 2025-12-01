@@ -40,7 +40,8 @@ echo_npdes_effluent_violations <- dbGetQuery(con, echo_npdes_effluent_violations
 # Formatting ----
 # Set date class
 echo_npdes_effluent_violations_formatted <- echo_npdes_effluent_violations %>%
-  mutate(MONITORING_PERIOD_END_DATE = as.Date(MONITORING_PERIOD_END_DATE, "%m/%d/%Y"))
+  #mutate(MONITORING_PERIOD_END_DATE = as.Date(MONITORING_PERIOD_END_DATE, "%m/%d/%Y")) 
+ mutate(MONITORING_PERIOD_END_DATE = as.Date(MONITORING_PERIOD_END_DATE, format = "%d-%b-%y")) # if the date format above doesn't work, try this one.
 
 # Create a FYQTR column  
 echo_npdes_effluent_violations_formatted$FYQTR <- as.yearqtr(echo_npdes_effluent_violations_formatted$MONITORING_PERIOD_END_DATE) 

@@ -80,7 +80,9 @@ NPDES_CONSOLIDATED_ENF_COMPL_PREP_POP_BLNKS <- SNC_Calc %>%
       is.na(CWP_SNC_STATUS) ~ paste("No Significant Noncompliance present in latest quarter"),
       TRUE ~ as.character(CWP_SNC_STATUS)
     )
-  )
+  ) 
+
+NPDES_CONSOLIDATED_ENF_COMPL_PREP_POP_BLNKS$FACILITY_UIN <- as.character(NPDES_CONSOLIDATED_ENF_COMPL_PREP_POP_BLNKS$FACILITY_UIN)
 
 ### Replace Compliance Status for Current Reporting Period ----
 CURRENT_COMPL_STAT_REPLC_VAL <- list(

@@ -12,6 +12,7 @@ library(vroom)
 db <- Sys.getenv("ECHO_DB")
 uid <- Sys.getenv("ECHO_uid")
 pwd <- Sys.getenv("ECHO_pwd")
+
 FYQTR_NPDES <- Sys.getenv("FYQTR_NPDES") # Import the FYQTR to run query
 
 con <- dbConnect(odbc::odbc(),

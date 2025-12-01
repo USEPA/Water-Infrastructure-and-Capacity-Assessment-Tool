@@ -5,6 +5,8 @@ library(dplyr)
 
 # Import data -------------- 
 
+options(scipen = 999)
+
 # Load environment variables for current FYQTR and CPBD
 load(here("R/CWS_Analysis/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
 
@@ -60,6 +62,9 @@ left_join_by_pwsid <- function(x, y) {
 # Perform left joins iteratively on all data frames
 merged_enf_compl_df <- Reduce(left_join_by_pwsid, enf_compl_df, init = CWS_ACTIVE) 
 
+merged_enf_compl_df <- merged_enf_compl_df %>%
+  mutate(REGISTRY_ID = as.character(merged_enf_compl_df$REGISTRY_ID))
+
 # Check columns -----------------
 # Function to check for ".x" or ".y" in column names
 check_column_names <- function(df) {
@@ -69,7 +74,6 @@ check_column_names <- function(df) {
 }
 
 check_column_names(merged_enf_compl_df)
-
 
 # Calculate Sanitary Survey Overdue  ----------------
 

@@ -210,7 +210,7 @@ labels_zero_twentyplus <- c("0","1-5","6-10","11-20",">20")
 
 merged_enf_compl_df_zero_twentyplus <- cut_and_revalue_multiple(merged_enf_compl_df_zero_twenty, range_zero_twentyplus, breaks_zero_twentyplus, labels_zero_twentyplus)
 
-# Add Lead ALE Y/N Column
+## Add Lead ALE Y/N Column ----
 merged_enf_compl_df_zero_twentyplus <- merged_enf_compl_df_zero_twentyplus %>%
   mutate(
     LEAD_ALE_5YRS_YN = ifelse(
@@ -219,6 +219,51 @@ merged_enf_compl_df_zero_twentyplus <- merged_enf_compl_df_zero_twentyplus %>%
       "N"
     )
   )
+
+## Group LSLI Data ----
+library(BAMMtools)
+
+# Calculate Jenks breaks for 3 classes
+jenks_breaks_LSL_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$LSL_Cnt, k = 4)
+jenks_breaks_GRR_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$GRR_Cnt, k = 4)
+jenks_breaks_Unknown_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$Unknown_Cnt, k = 5)
+jenks_breaks_NonLead_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$Non_Lead_Cnt, k = 5)
+jenks_breaks_TotalSL_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$Tot_SL, k = 5)
+
+summary(merged_enf_compl_df_zero_twentyplus$LSL_Cnt)
+hist(merged_enf_compl_df_zero_twentyplus$LSL_Cnt)
+print(jenks_breaks_LSL_Cnt)
+#0   8114  39323  80595 150767
+breaks_LSL <- c(-Inf, 0, 8000, 60000, Inf)
+labels_LSL <- c("0","1-8,000","8,001-60,000",">60,001")
+
+summary(merged_enf_compl_df_zero_twentyplus$GRR_Cnt)
+hist(merged_enf_compl_df_zero_twentyplus$GRR_Cnt)
+print(jenks_breaks_GRR_Cnt)
+#0  58 229 518 997
+breaks_grr<- c(-Inf, 0, 60, 200, 500, Inf)
+labels_grr <- c("0","1-60","61-200","201-500",">500")
+
+summary(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
+hist(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
+print(jenks_breaks_Unknown_Cnt)
+#0  18372  94340 258104 436341
+breaks_unknown<- c(-Inf, 0, 18000, 94000, 260000, Inf)
+labels_unknown <- c("0","1-18,000","18,001-94,000","94,001-260,000",">260,000")
+
+summary(merged_enf_compl_df_zero_twentyplus$Tot_SL)
+hist(merged_enf_compl_df_zero_twentyplus$Tot_SL)
+print(jenks_breaks_NonLead_Cnt)
+#0  20111 111224 299350 744960
+breaks_nonlead<- c(-Inf, 0, 20000, 111000, 300000, Inf)
+labels_nonlead <- c("0","1-20,000","20,001-111,000","111,001-300,000",">300,000")
+
+summary(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
+hist(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
+print(jenks_breaks_TotalSL_Cnt)
+#0  23641 126926 336126 820465
+breaks_totSL<- c(-Inf, 23000, 127000, 336000, 820000, Inf)
+labels_totSL <- c("0","1-23,000","23,001-127,000","127,001-336,000",">336,000")
 
 # Check for blanks and NA Values --------------------
 blank_count <-

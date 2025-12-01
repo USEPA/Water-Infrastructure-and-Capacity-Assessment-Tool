@@ -6,6 +6,7 @@ library(dplyr)
 
 # This script is used to import formal enforcement action data for violations that have not yet RTCd.
 
+
 # Create a connection to SDWIS -------------------------
 db_sdwis <- Sys.getenv("SDWIS_DB")
 uid_sdiws <- Sys.getenv("SDWIS_uid")
