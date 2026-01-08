@@ -12,8 +12,7 @@ LSLI_Base <- vroom(here("Input_Data/SDWIS/SDWIS_service_line_inventory_2025Q3.cs
     "LSL_Cnt" = '# Lead Service Lines'  ,
     "Unknown_Cnt" = '# Lead Status Unknown Service Lines' ,
     "Non_Lead_Cnt" = '# Non-lead Service Lines'  ,
-    "Tot_SL" = 'Total # Service Lines Reported' ,
-    "SL_Rpt_Status"  = 'Service Line Report Status'
+    "Tot_SL" = 'Total # Service Lines Reported' 
   ) %>%
   select(
     "PWSID",
@@ -21,47 +20,34 @@ LSLI_Base <- vroom(here("Input_Data/SDWIS/SDWIS_service_line_inventory_2025Q3.cs
     "LSL_Cnt",
     "Unknown_Cnt",
     "Non_Lead_Cnt",
-    "Tot_SL",
-    "SL_Rpt_Status"
+    "Tot_SL"
+  ) %>%
+  mutate(
+    SL_Rpt_Status = ""
   )
 
 # Calculate new columns ----
 LSLI_New_Cols <- LSLI_Base %>%
   mutate(
-    case_when(
-      
-    ))
-
-  mvsli.NUM_LEAD_SERVICE_LINES IS NOT NULL
-  AND mvsli.NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL IS NOT NULL
-  AND mvsli.NUM_LEAD_STATUS_UNKNOWN_SL IS NOT NULL
-  AND mvsli.PWS_TYPE_CODE <> 'TNCWS'
-)
-THEN 'Reported all required service line types'
-
-WHEN (
-  (mvsli.NUM_LEAD_SERVICE_LINES IS NULL
-   OR mvsli.NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL IS NULL
-   OR mvsli.NUM_LEAD_STATUS_UNKNOWN_SL IS NULL)
-  AND mvsli.PWS_TYPE_CODE <> 'TNCWS'
-)
-AND NOT (
-  mvsli.NUM_LEAD_SERVICE_LINES IS NULL
-  AND mvsli.NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL IS NULL
-  AND mvsli.NUM_LEAD_STATUS_UNKNOWN_SL IS NULL
-)
-THEN 'Reported some but not all service line types'
-
-WHEN (
-  mvsli.NUM_LEAD_SERVICE_LINES IS NULL
-  AND mvsli.NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL IS NULL
-  AND mvsli.NUM_LEAD_STATUS_UNKNOWN_SL IS NULL
-  AND mvsli.PWS_TYPE_CODE <> 'TNCWS'
-)
-THEN 'Did not report any required service line types'
-
-ELSE 'System is not required to report'
-END AS SERVICE_LINE_REPORT_STATUS
+    SL_Rpt_Status =
+      case_when(
+        !is.na(LSL_Cnt) &
+          !is.na(GRR_Cnt) &
+          !is.na(Unknown_Cnt) ~ 'Reported all required service line types', TRUE ~  as.character(SL_Rpt_Status) 
+      ),
+    SL_Rpt_Status =
+      case_when(
+        is.na(LSL_Cnt) |
+          is.na(GRR_Cnt) |
+          is.na(Unknown_Cnt) ~ 'Reported some but not all required service line types', TRUE ~  as.character(SL_Rpt_Status) 
+      ),
+    SL_Rpt_Status =
+      case_when(
+        is.na(LSL_Cnt) &
+          is.na(GRR_Cnt) &
+          is.na(Unknown_Cnt) ~ 'Did not report any required service line types', TRUE ~  as.character(SL_Rpt_Status) 
+      )
+  )
 
 # Export data
-write.csv(LSLI_Base, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/LSLI_Data.csv"), row.names = FALSE)
+write.csv(LSLI_New_Cols, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/LSLI_Data.csv"), row.names = FALSE)

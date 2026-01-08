@@ -13,6 +13,7 @@ uid_sdiws <- Sys.getenv("SDWIS_uid")
 pwd_sdwis <- Sys.getenv("SDWIS_pwd")
 
 channel_SDWIS <- odbcConnect(db_sdwis, uid_sdiws, pwd_sdwis)
+channel_SDWIS <- odbcConnect("SFDW Prod", "cneely01", "Today10142025$")
 
 # Set-up and run query----
 

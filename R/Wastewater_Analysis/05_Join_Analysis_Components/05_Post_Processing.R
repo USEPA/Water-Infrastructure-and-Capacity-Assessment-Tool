@@ -52,7 +52,7 @@ NPDES_CENSUS_CLEAN2 <-
       "HLRNC",
       "CWP_SNC_STATUS",               # NEW
       "CWP_QTRS_WITH_SNC",            # NEW
-      #"SNC_Present",               #REMOVE
+      #"SNC_Present",                  # Remove (replaced with CWP_SNC_Status)
       "CWP_QTRS_WITH_SNC_RANGE",      # NEW
       "FORMAL_ENF_ACT_5YR_COUNT" ,
       "FORMAL_ENF_ACT_5YR_COUNT_RANGE" , 

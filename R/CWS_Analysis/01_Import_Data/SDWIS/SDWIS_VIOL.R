@@ -14,6 +14,8 @@ pwd_sdwis <- Sys.getenv("SDWIS_pwd")
 
 channel_SDWIS <- odbcConnect(db_sdwis, uid_sdiws, pwd_sdwis)
 
+
+
 # Set-up Query -------------------------
 
 # Load compliance period begin date
