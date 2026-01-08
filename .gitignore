@@ -11,6 +11,7 @@ Final_Exports_for_App/Drinking_Water_Files/Archive/
 R/CWS_Analysis/01_Import_Data/DWSRF/Program_Data/**
 Pop_Weighted_Outputs/
 Input_Data/
+Sandbox/
 R/**/*.csv
 R/**/*.gpkg
 .ini
