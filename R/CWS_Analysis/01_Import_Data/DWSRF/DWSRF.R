@@ -16,7 +16,7 @@ OWSRF_PW <- Sys.getenv("OWSRF_PW")
 
 channel_OWSRF <- odbcConnect(OWSRF_DB, OWSRF_UN, OWSRF_PW)
 
-# Load configuration varibles
+# Load configuration variables
 source(here("R/CWS_Analysis/00_config.R"))
 
 # Drinking Water Query ----
@@ -173,4 +173,4 @@ DWSRF_Subset <- DWSRF_Raw_Data %>%
   )
   
 # Export -----------------------
-write.csv(DWSRF_History_Subset, here("Input_Data/DWSRF/DWSRF_History.csv"), row.names = FALSE)
+write.csv(DWSRF_Subset, here("Input_Data/DWSRF/DWSRF_History.csv"), row.names = FALSE)
