@@ -5,22 +5,14 @@ library(vroom)
 # This script modified column names from the lead service line inventory data frame
 
 # Import and format data
-LSLI_Base <- vroom(here("Input_Data/SDWIS/SDWIS_service_line_inventory_2025Q3.csv")) %>%
-  rename(
-    "PWSID" = "PWS ID",
-    "GRR_Cnt" = '# Galvanized Requiring Replacement Service Lines',
-    "LSL_Cnt" = '# Lead Service Lines'  ,
-    "Unknown_Cnt" = '# Lead Status Unknown Service Lines' ,
-    "Non_Lead_Cnt" = '# Non-lead Service Lines'  ,
-    "Tot_SL" = 'Total # Service Lines Reported' 
-  ) %>%
+LSLI_Base <- vroom(here("Input_Data/SDWIS/SDWIS_LSL_INVENTORY.csv")) %>%
   select(
     "PWSID",
-    "GRR_Cnt",
-    "LSL_Cnt",
-    "Unknown_Cnt",
-    "Non_Lead_Cnt",
-    "Tot_SL"
+    "NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL",
+    "NUM_LEAD_SERVICE_LINES",
+    "NUM_LEAD_STATUS_UNKNOWN_SL",
+    "NUM_NONLEAD_SERVICE_LINES",
+    "TOTAL_NUM_SERVICE_LINES_REPORTED"
   ) %>%
   mutate(
     SL_Rpt_Status = ""
@@ -31,21 +23,21 @@ LSLI_New_Cols <- LSLI_Base %>%
   mutate(
     SL_Rpt_Status =
       case_when(
-        !is.na(LSL_Cnt) &
-          !is.na(GRR_Cnt) &
-          !is.na(Unknown_Cnt) ~ 'Reported all required service line types', TRUE ~  as.character(SL_Rpt_Status) 
+        !is.na(NUM_LEAD_SERVICE_LINES) &
+          !is.na(NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL) &
+          !is.na(NUM_LEAD_STATUS_UNKNOWN_SL) ~ 'Reported all required service line types', TRUE ~  as.character(SL_Rpt_Status) 
       ),
     SL_Rpt_Status =
       case_when(
-        is.na(LSL_Cnt) |
-          is.na(GRR_Cnt) |
-          is.na(Unknown_Cnt) ~ 'Reported some but not all required service line types', TRUE ~  as.character(SL_Rpt_Status) 
+        is.na(NUM_LEAD_SERVICE_LINES) |
+          is.na(NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL) |
+          is.na(NUM_LEAD_STATUS_UNKNOWN_SL) ~ 'Reported some but not all required service line types', TRUE ~  as.character(SL_Rpt_Status) 
       ),
     SL_Rpt_Status =
       case_when(
-        is.na(LSL_Cnt) &
-          is.na(GRR_Cnt) &
-          is.na(Unknown_Cnt) ~ 'Did not report any required service line types', TRUE ~  as.character(SL_Rpt_Status) 
+        is.na(NUM_LEAD_SERVICE_LINES) &
+          is.na(NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL) &
+          is.na(NUM_LEAD_STATUS_UNKNOWN_SL) ~ 'Did not report any required service line types', TRUE ~  as.character(SL_Rpt_Status) 
       )
   )
 

@@ -13,4 +13,4 @@ names(tribe_codes_lower48) <-
   gsub(" ", "_", names(tribe_codes_lower48))
 
 # Export -----------------
-write.csv(tribe_codes_lower48, here("Input_Data/Locational/Tribe/tribe_codes_lower48.csv"), row.names = FALSE)
+write.csv(tribe_codes_lower48, here("Input_Data/Locational/Tribe/tribe_codes_lower48.csv"), row.names = FALSE, append=FALSE)

@@ -8,7 +8,7 @@ library(dplyr)
 options(scipen = 999)
 
 # Load environment variables for current FYQTR and CPBD
-load(here("R/CWS_Analysis/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
+source(here("R/CWS_Analysis/00_config.R"))
 
 ## Import all active CWS file ---------------
 CWS_ACTIVE <- vroom(here("Input_Data/SDWIS/SDWIS_CWS_ACTIVE_ATTRIBUTES.csv")) %>%

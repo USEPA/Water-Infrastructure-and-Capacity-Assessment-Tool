@@ -9,8 +9,8 @@ library(usethis)
 # This script imports service line inventory data from SDFW.
 
 # Create a connection to SDWIS ----
-# Load compliance period begin date
-load(here("R/CWS_Analysis/01_Import_Data/SDWIS/compliance_period_begin_date.Rdata"))
+# Load configuration variables
+source(here("R/CWS_Analysis/00_config.R"))
 
 db_sdwis <- Sys.getenv("SDWIS_DB")
 uid_sdiws <- Sys.getenv("SDWIS_uid")

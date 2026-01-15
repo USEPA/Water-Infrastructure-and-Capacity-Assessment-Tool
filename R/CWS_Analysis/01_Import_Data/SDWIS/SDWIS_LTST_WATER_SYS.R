@@ -13,7 +13,6 @@ uid_sdiws <- Sys.getenv("SDWIS_uid")
 pwd_sdwis <- Sys.getenv("SDWIS_pwd")
 
 channel_SDWIS <- odbcConnect(db_sdwis, uid_sdiws, pwd_sdwis)
-channel_SDWIS <- odbcConnect("SFDW Prod", "cneely01", "Today10142025$")
 
 # Set-up and run query----
 
@@ -26,13 +25,12 @@ SDFW_CWS_ACTIVE_ATTRIBUTES <- sqlQuery(
 
 ## Convert codes to full descriptions----
 ### Set up query ----
-SDWA_ref_codes_query <- paste(
-  "SELECT *
+SDWA_ref_codes_query <- paste("SELECT *
   FROM REF_CODE_VALUE
   ")
 
 ### Run query ----
-SDWA_ref_codes <- sqlQuery(channel_SDWIS,SDWA_ref_codes_query)
+SDWA_ref_codes <- sqlQuery(channel_SDWIS, SDWA_ref_codes_query)
 
 ### PWS type code----
 SDFW_CWS_ACTIVE_ATTRIBUTES <-
@@ -110,4 +108,8 @@ SDFW_CWS_ACTIVE_ATTRIBUTES <-
   )  %>% dplyr::select(-c("PRIMACY_AGENCY_CODE")) %>% rename("PRIMACY_AGENCY" = "VALUE_DESCRIPTION")
 
 # Export----
-write.csv(SDFW_CWS_ACTIVE_ATTRIBUTES, here("Input_Data/SDWIS", "SDWIS_CWS_ACTIVE_ATTRIBUTES.csv"), row.names = FALSE)
+write.csv(
+  SDFW_CWS_ACTIVE_ATTRIBUTES,
+  here("Input_Data/SDWIS", "SDWIS_CWS_ACTIVE_ATTRIBUTES.csv"),
+  row.names = FALSE
+)

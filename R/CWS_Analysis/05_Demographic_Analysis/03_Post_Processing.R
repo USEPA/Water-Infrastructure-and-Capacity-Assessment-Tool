@@ -61,8 +61,14 @@ PWS_with_demographic_data_ranges <-
 
 
 # Export Data ----
+# write.csv(
+#   PWS_with_demographic_data_ranges,
+#   here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data_V1DOT2PWS.csv"),
+#   row.names = FALSE
+# )
+
 write.csv(
   PWS_with_demographic_data_ranges,
-  here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data_V1DOT2PWS.csv"),
+  here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data.csv"),
   row.names = FALSE
 )

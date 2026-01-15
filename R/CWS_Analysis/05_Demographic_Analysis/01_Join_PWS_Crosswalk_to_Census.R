@@ -147,27 +147,7 @@ ACS_BG_Socioeconomic <-
 
 # Import the Community Water System Service Area Crosswalk Table from github. This file is a crosswalk between PWSID and all intersecting census blocks. This is the central table that will be used to calculate building weighted averages for the various demographic data. This PWS-Census Block crosswalk table was obtained from USEPA's Office of Research and Development. The service area boundary source data and technical documentation can be found here: https://gispub.epa.gov/serviceareas (note this technical documentation does not include discussion of the crosswalk table, just the development of the boundaries themselves).
 
-blocks_pws <- read.csv("https://media.githubusercontent.com/media/USEPA/ORD_SAB_Model/refs/heads/main/Version_History/2_0/Census_Tables/Blocks_V_2_0.csv")
-
-# blocks_pws <-
-#   vroom(
-#     here(
-#       "Input_Data/Census/PWS-Crosswalk/All_Blocks_1DOT2.csv")
-#   ) %>%
-#   mutate(
-#     blk_fips =
-#       paste0(
-#         substr(.$GISJOIN, 2, 3),
-#         substr(.$GISJOIN, 5, 7),
-#         substr(.$GISJOIN, 9, 18) #Create block FIPS code column
-#       ),
-#     bg_fips =
-#       paste0(
-#         substr(.$GISJOIN, 2, 3),
-#         substr(.$GISJOIN, 5, 7),
-#         substr(.$GISJOIN, 9, 15) #Create block group FIPS code column
-#       )
-#   )
+blocks_pws <- read.csv("https://media.githubusercontent.com/media/USEPA/ORD_SAB_Model/refs/heads/main/Version_History/2_1/Census_Tables/Blocks_V_2_1.csv")
 
 # Join Demographic Data to Crosswalk Table ----
 ## Block population and Urban/Rural Data ----

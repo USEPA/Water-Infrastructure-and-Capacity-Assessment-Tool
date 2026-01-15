@@ -17,4 +17,4 @@ Counties_point <- arc_select(flayer.counties) %>%
   st_point_on_surface(.) 
 
 # Export data -----------------
-st_write(Counties_point, here("Input_Data/Locational/County-Municipio/Counties_point.gdb"), overwrite = TRUE)
+st_write(Counties_point, here("Input_Data/Locational/County-Municipio/Counties_point.gdb"), append=FALSE)

@@ -6,6 +6,7 @@ library(tigris)
 library(stringr)
 
 # This script performs final cleaning operations prior to .shp export
+
 # Import data ----
 # Import combined CWS dataset (with geometries)
 final_CWS_dataset_with_DWSRF <- st_read(here("R/CWS_Analysis/06_Join_Analysis_Components/final_CWS_dataset_with_DWSRF.gpkg")) 
@@ -82,6 +83,12 @@ final_CWS_dataset_with_DWSRF_final_cols <-
       "LEAD_ALE_COUNT_5YRS_RANGE" ,
       "LEAD_SAMPLE_COUNT_5YRS",
       "LEAD_SAMPLE_COUNT_5YRS_RANGE",
+      "SL_RPT_STATUS", #Jan 2026 new addition 
+      "NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL", #Jan 2026 new addition  
+      "NUM_LEAD_SERVICE_LINES", #Jan 2026 new addition 
+      "NUM_LEAD_STATUS_UNKNOWN_SL", #Jan 2026 new addition 
+      "NUM_NONLEAD_SERVICE_LINES", #Jan 2026 new addition 
+      "TOTAL_NUM_SERVICE_LINES_REPORTED", #Jan 2026 new addition 
       "ENF_PRIORITY_SYS",
       "OUTSTANDING_PERFORMER",
       "OUTSTANDING_PERFORM_BEGIN_DATE",
@@ -127,9 +134,7 @@ final_CWS_dataset_with_DWSRF_final_cols <-
     "TRIBE_SERVED" = "TRIBAL_NAME", #previous TRIBE_SERVED_SDWIS,
     "BIA_TRIBE_CODE" = "TRIBAL_CODE",
     "STATE_DWSRF_DAC" = "DISADVANTAGED_ASSISTANCE" #previously DISADVANTAGED_ASSISTANCE
-  ) #%>% mutate(
-  #   REGISTRY_ID = as.numeric(REGISTRY_ID), # Ensure REGISTRY_ID is character
-  # )
+  )
 
 ##  Check for blanks and NA values ----
 # blank_count <-
