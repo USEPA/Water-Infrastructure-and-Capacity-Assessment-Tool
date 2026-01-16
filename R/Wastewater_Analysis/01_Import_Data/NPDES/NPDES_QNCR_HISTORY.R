@@ -13,7 +13,8 @@ db <- Sys.getenv("ECHO_DB")
 uid <- Sys.getenv("ECHO_uid")
 pwd <- Sys.getenv("ECHO_pwd")
 
-FYQTR_NPDES <- Sys.getenv("FYQTR_NPDES") # Import the FYQTR to run query
+# Import configuration variables
+source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
 
 con <- dbConnect(odbc::odbc(),
                  dsn = db,

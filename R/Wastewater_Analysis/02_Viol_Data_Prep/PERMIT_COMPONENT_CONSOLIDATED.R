@@ -3,6 +3,7 @@ library(dplyr)
 library(here)
 
 # This script consolidates permit component types by NPDES ID
+
 # Import data ----
 NPDES_PERMIT_COMP <- vroom(here("Input_Data/NPDES/NPDES_PERMIT_COMPONENTS.csv"))
 

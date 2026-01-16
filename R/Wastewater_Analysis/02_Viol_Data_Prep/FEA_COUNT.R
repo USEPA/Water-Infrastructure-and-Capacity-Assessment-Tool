@@ -2,12 +2,12 @@ library(vroom)
 library(dplyr)
 library(here)
 
-# This script counts the number of FEA by NPDES ID
+# This script counts the number of FEA (Formal Enforcement Action) by NPDES ID in the last 5 years.
 
 # Import data ----
 FEA_NPDES <- vroom(here("Input_Data/NPDES/NPDES_FORMAL_ENFORCEMENT_ACTIONS.csv"))
 
-# Group enforcement actions by NPDES ID
+# Group enforcement actions by NPDES ID  and Count the Number of FEA in the last 5yrs----
 FEA_COUNT_5YRS <-
   FEA_NPDES %>%
   group_by(SOURCE_ID) %>%
@@ -17,7 +17,7 @@ FEA_COUNT_5YRS <-
 # View data
 hist(FEA_COUNT_5YRS$FORMAL_ENF_ACT_5YR_COUNT)
 
-# Export
+# Export ----
 vroom_write(
   FEA_COUNT_5YRS,
   here(

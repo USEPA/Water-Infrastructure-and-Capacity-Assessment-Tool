@@ -24,24 +24,24 @@ set_arc_token(token)
 
 # This script performs final cleaning operations prior to .shp export
 # Polygon Overwrite ----
-final_CWS_dataset_with_DWSRF <- st_read(here("Final_Exports_for_App/Drinking_Water_Files/PWS_Polygons_2025_11_17.gpkg")) %>%
+CWS_Polygons_Input <- st_read(here("Final_Exports_for_App/Drinking_Water_Files/PWS_Polygons_2026_01_16.gpkg")) %>%
   sf::st_transform(.,crs = 3857)
 
-test2 <- "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/Community_Water_Systems_March_28_2024/FeatureServer/343"
+CWS_Polygons_Target_URL <- "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/Community_Water_Systems_March_28_2024/FeatureServer/343"
 
-test2_noSABs <- arc_open(test2)
-test2_noSABs
+CWS_Polygons_Target <- arc_open(CWS_Polygons_Target_URL)
+CWS_Polygons_Target
 
-test2_noSABs[["supportsTruncate"]]
+CWS_Polygons_Target[["supportsTruncate"]]
 
-truncate_res <- truncate_layer(test2_noSABs)
-truncate_res
+CWS_Polygons_Target_Truncate <- truncate_layer(CWS_Polygons_Target)
+CWS_Polygons_Target_Truncate
 
-test2_noSABs <- refresh_layer(test2_noSABs)
-test2_noSABs
+CWS_Polygons_Target <- refresh_layer(CWS_Polygons_Target)
+CWS_Polygons_Target
 
-add_restest2 <- add_features(test2_noSABs, final_CWS_dataset_with_DWSRF)
-head(add_restest2)
+CWS_Polygons_Updated <- add_features(CWS_Polygons_Target, CWS_Polygons_Input)
+head(CWS_Polygons_Updated)
 
 # Pts Overwrite ----
 CWS_without_SAB <- "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/Community_Water_Systems_June_8_2024_Pts/FeatureServer/447"

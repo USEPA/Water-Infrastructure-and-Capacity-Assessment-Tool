@@ -3,6 +3,7 @@ library(vroom)
 library(here)
 library(stringr)
 library(data.table)
+library(tidyr)
 options(scipen = 999)
 
 # This script imports census block and block group data and the PWS crosswalk table. It then joins the PWS-Crosswalk table with census block population data and ACS demographic data to calculate population-weighted averages for various demographic fields.
@@ -152,7 +153,6 @@ blocks_pws <- read.csv("https://media.githubusercontent.com/media/USEPA/ORD_SAB_
 # Join Demographic Data to Crosswalk Table ----
 ## Block population and Urban/Rural Data ----
 
-# Join census block population dataframe to crosswalk table. 
 blocks_pws_join <-
   merge(blocks_pws,
         #PWSID-Census Block Crosswalk Table
@@ -161,12 +161,14 @@ blocks_pws_join <-
         # by = "blk_fips",
         by.x = "GEOID20", by.y = "GEOCODE",
         all.x = TRUE) %>%
-  mutate(pop_ovlp = Bldg_Weight * U7H001,
+  mutate(pop_ovlp = replace_na(Bldg_Weight, 0) * U7H001,
          #U7H001 is census block population. Calculate the population of each block that overlaps with a PWS
-         housingunit_ovlp = Bldg_Weight * U9V001) #U9V001 is total census block housing units. Calculate the housing units in each block that overlaps with a PWS
+         housingunit_ovlp = replace_na(Bldg_Weight, 0) * U9V001) #U9V001 is total census block housing units. Calculate the housing units in each block that overlaps with a PWS
 
 # Data Check for NAs (NAs would indicate a block ID in the PWS-crosswalk df did not match with a block ID in the census_blk_pop_data dataframe). This should be zero.
 sum(is.na(blocks_pws_join$U7H001))
+sum(is.na(blocks_pws_join$pop_ovlp))
+sum(is.na(blocks_pws_join$housingunit_ovlp))
 
 ## Block group ACS Data ----
 

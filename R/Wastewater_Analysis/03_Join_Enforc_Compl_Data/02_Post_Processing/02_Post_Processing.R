@@ -2,12 +2,15 @@ library(dplyr)
 library(vroom)
 library(here)
 library(tidyr)
+library(stringr)
+
 # This script is used to post-process the merged enforcement and compliance data including converting code values to full descriptions, populating blank fields, and add count range fields, and renaming select columns. 
 
 # Import data ----
 NPDES_CONSOLIDATED_ENF_COMPL_PREP <- vroom(here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/NPDES_CONSOLIDATED_ENF_COMPL.csv"))
 
-FYQTR_NPDES <- Sys.getenv("FYQTR_NPDES")
+# Import configuration variables
+source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
 
 # Check for blanks and NA Values ----
 blank_count <-
@@ -219,6 +222,9 @@ labels_zero_15 <- c("(-Inf,0]" = "0",
                     "(15, Inf]" = ">15")
 
 labels_zero_15 <- cut_and_revalue_multiple(NPDES_ZERO_20, range_zero_15, breaks_zero_15, labels_zero_15)
+
+## Remove blank spaces from DFR URL ----
+labels_zero_15$DFR_URL <- str_replace_all(labels_zero_15$DFR_URL, " ", "")
 
 # Check for blanks and NA Values --------------------
 blank_count <-

@@ -8,6 +8,8 @@ library(here)
 EFF_VIOL <- vroom(here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"))
 EFF_PARAM <- vroom(here("Input_Data/NPDES/effluent_crosswalk.csv"))
 
+# Run analysis ----
+
 # Add a column to categorize/group effluent parameters into a effluent violation category
 EFF_VIOL_WITH_PARAM <-
   merge(
@@ -55,11 +57,11 @@ E90_Violations_Param_12Qtrs$EFF_PARAM_CATEGORIES_3YR <-
     remove_duplicates_within_cell
   )
 
-# View data
+# View data ----
 summary(E90_Violations_Param_12Qtrs$EFF_VIOLATIONS_3YR_COUNT)
 hist(E90_Violations_Param_12Qtrs$EFF_VIOLATIONS_3YR_COUNT)
 
-# Export
+# Export ----
 vroom_write(
   E90_Violations_Param_12Qtrs,
   here(

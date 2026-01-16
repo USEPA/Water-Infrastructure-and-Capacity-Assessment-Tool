@@ -219,7 +219,7 @@ currentDate <- str_replace_all(currentDate, "-", "_")
 # All Facilities
 all_fac_excelFileName <-
   paste(
-    "Final_Exports_for_App/Wastewater_Files/POTW_Export_",
+    "Final_Exports_for_App/Wastewater_Files/Wastewater_Export_",
     currentDate,
     ".csv",
     sep = ""
@@ -255,7 +255,7 @@ NPDES_CENSUS_CLEAN2_FOR_SHP <-
 # Final Export
 all_fac_gdbFileName <-
   paste(
-    "Final_Exports_for_App/Wastewater_Files/POTW_Export_",
+    "Final_Exports_for_App/Wastewater_Files/Wastewater_Export_",
     currentDate,
     ".gpkg",
     sep = ""

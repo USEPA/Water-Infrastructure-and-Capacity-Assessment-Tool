@@ -4,20 +4,20 @@ library(here)
 
 # This script counts the number of quarters (in the last 12) with at least 1 DMR Violation
 
-# Import data
+# Import data ----
 DMR_NPDES <- vroom(here("Input_Data/NPDES/NPDES_VIOL_D80D90_DMR.csv"))
 
-# Run analysis
+# Run analysis ----
 DMR_COUNT_3YRS <-
   DMR_NPDES %>%
   group_by(NPDES_ID) %>%
   distinct(NPDES_ID, FYQTR, .keep_all = TRUE) %>%
   summarise(DMR_3YRS_COUNT = n())
 
-# View data
+# View data ----
 hist(DMR_COUNT_3YRS$DMR_3YRS_COUNT)
 
-# Export
+# Export ----
 vroom_write(
   DMR_COUNT_3YRS,
   here(

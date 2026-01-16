@@ -8,10 +8,8 @@ library(odbc)
 
 # This script imports DMR (D80 and D90) violations data for the last 3-years.
 
-# Get environment variables
-FYQTR_NPDES <- Sys.getenv("FYQTR_NPDES") # Import the "FYQTR" to run SQL query
-npdes_set_fyqtr <- Sys.getenv("npdes_set_fyqtr") # Import the "FY QTR" to filter data
-npdes_set_fyqtr <- as.yearqtr(npdes_set_fyqtr) # Convert to a yearqtr class
+# Import configuration variables
+source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
 
 # Create a connection to ECHO ----
 db <- Sys.getenv("ECHO_DB")

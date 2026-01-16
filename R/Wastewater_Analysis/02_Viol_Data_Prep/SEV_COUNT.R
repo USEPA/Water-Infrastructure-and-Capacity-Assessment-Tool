@@ -3,14 +3,12 @@ library(dplyr)
 library(here)
 library(zoo)
 
-# This script counts the number of SNCs by NPDES ID open as of the most current reporting period AND the number of quarters in the last 3-yrs with at least 1 SNC.
+# This script counts the number of Single Event Violations by NPDES ID open as of the most current reporting period AND the number of quarters in the last 3-yrs with at least 1 Single Event Violation.
 
-# Import data
+# Import data ----
 SEV_NPDES <- vroom(here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"))
-# npdes_set_fyqtr <- Sys.getenv("npdes_set_fyqtr") # Import the "FY QTR" to filter data
-# FY_QTR <- as.yearqtr(npdes_set_fyqtr) # Convert to a yearqtr class
 
-# Run analysis
+# Run analysis  ----
 
 # Filter for all open/unresolved SE Violations - Single event end date is empty/null
 # Note: If the violation does not have an end date but has a RNC resolution code, the resolution date becomes the violation end date. (source: https://echo.epa.gov/help/reports/dfr-data-dictionary)
@@ -24,19 +22,19 @@ SEV_COUNT_3YRS_OPEN <- SEV_NPDES %>%
       )
   )
 
-# Count of Single Event Violations that have not returned to compliance
+## Count of Single Event Violations that have not returned to compliance  ----
 SEV_COUNT_3YRS_OPEN <- SEV_COUNT_3YRS_OPEN %>% 
   group_by(NPDES_ID) %>%
   reframe(SEV_OPEN_COUNT = n())
 
-# Count of quarters in the last 3 years with at least 1 SEV
+## Count of quarters in the last 3 years with at least 1 SEV  ----
 SEV_3YRS_COUNT <-
   SEV_NPDES %>%
   group_by(NPDES_ID) %>%
   distinct(NPDES_ID, FYQTR, .keep_all = TRUE) %>%
   summarise(SEV_3YRS_COUNT = n())
 
-# Export
+# Export ----
 
 vroom_write(
   SEV_COUNT_3YRS_OPEN,

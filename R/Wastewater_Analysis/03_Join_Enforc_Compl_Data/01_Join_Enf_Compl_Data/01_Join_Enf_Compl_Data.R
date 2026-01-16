@@ -23,8 +23,7 @@ NPDES_ACTIVE <- vroom(here("Input_Data/NPDES/ECHO_ACTIVE_POTW.csv")) %>%
     "ACTUAL_AVERAGE_FLOW_NMBR"
   )
   
-ECHO_FACILITY_DETAIL <- vroom(here("Input_Data/NPDES/ECHO_FAC_DETAILS_POTW.csv")) 
-#ECHO_FACILITY_DETAIL$REGISTRY_ID <- format(ECHO_FACILITY_DETAIL$REGISTRY_ID, scientific = FALSE) # Remove scientific notation
+ECHO_FACILITY_DETAIL <- vroom(here("Input_Data/ECHO/ECHO_FAC_DETAILS_POTW.csv")) 
 
 ## Import all enforcement and compliance data ----
 

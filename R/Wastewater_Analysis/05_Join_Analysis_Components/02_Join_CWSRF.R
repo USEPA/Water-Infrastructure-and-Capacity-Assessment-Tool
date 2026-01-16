@@ -11,8 +11,7 @@ POTW_VIOL_LAGOON <- vroom(here("R/Wastewater_Analysis/05_Join_Analysis_Component
 
 # Import CWSRF history data and group the data by NPDES ID
 CWSRF_history <- vroom(here("Input_Data/CWSRF/CWSRF_History.csv"))%>%
-  rename("CWSRF_Hardship_Community" = "Hardship/Disadvantaged_Community?",
-         "NPDES_ID"= "NPDES_Permit_Number") 
+  rename("CWSRF_Hardship_Community" = "Disadvantaged_Assistance")
 
 CWSRF_history_grouped <- CWSRF_history %>%
   arrange(desc(Initial_Agreement_Date)) %>% # Sort data in date descending order to enable correct selection of disadvantaged assistance value

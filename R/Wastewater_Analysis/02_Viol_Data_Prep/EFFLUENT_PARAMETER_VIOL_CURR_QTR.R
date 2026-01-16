@@ -4,8 +4,9 @@ library(here)
 
 # This script identifies all effluent parameters associated with effluent violations in the current quarter. 
 
-# Import data ----
-FYQTR_NDPES <- Sys.getenv("npdes_set_fyqtr")
+# Import data and configuration variables----
+source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
+
 EFF_VIOL <- vroom(here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"))
 EFF_PARAM <- vroom(here("Input_Data/NPDES/effluent_crosswalk.csv"))
 
@@ -22,7 +23,7 @@ EFF_VIOL_WITH_PARAM <-
 # Count the number of effluent violations in the current quarter and the corresponding parameters violated in the last 12 qtrs
 EFF_VIOL_WITH_PARAM_Q12 <-
   EFF_VIOL_WITH_PARAM  %>%
-  filter(FYQTR == FYQTR_NDPES) %>% 
+  filter(FYQTR == npdes_set_fyqtr) %>% 
   group_by(NPDES_ID) %>%
   summarise(
     EFF_PARAMETER_VIOLATIONS_Q12 = paste0(PARAMETER_DESC, collapse = " | "),
