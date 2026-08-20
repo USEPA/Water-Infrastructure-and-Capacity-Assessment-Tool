@@ -173,4 +173,5 @@ DWSRF_Subset <- DWSRF_Raw_Data %>%
   )
   
 # Export -----------------------
-write.csv(DWSRF_Subset, here("Input_Data/DWSRF/DWSRF_History.csv"), row.names = FALSE)
+#write.csv(DWSRF_Subset, here("Input_Data/DWSRF/DWSRF_History.csv"), row.names = FALSE)
+saveRDS(DWSRF_Subset, here("R/CWS_Analysis/01_Import_Data/DWSRF/Temp_Outputs/DWSRF_History.rds"))

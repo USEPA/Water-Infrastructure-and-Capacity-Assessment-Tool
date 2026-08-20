@@ -120,7 +120,7 @@ final_CWS_dataset_with_DWSRF_final_cols <-
       "PCT_RURAL_RANGE",
       "PCT_UNEMPLY_RANGE",
       "DFR_URL",
-      "geom" #previous geometry
+      "geom" 
     )
   ) %>%
   rename(
@@ -226,6 +226,32 @@ final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs <-
 # 
 # View(summary_df)
 
+# Specify Number of Digits for all Numeric Values
+final_CWS_dataset_set_digits <- final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs %>%
+  mutate(
+    POPULATION_SERVED_COUNT = round(as.numeric(POPULATION_SERVED_COUNT), 0),
+    SERVICE_CONNECTIONS_COUNT = round(as.numeric(SERVICE_CONNECTIONS_COUNT), 0),
+    PWS_MHI_WEIGHT = round(as.numeric(PWS_MHI_WEIGHT), 0),
+    PCT_LOWINC = round(as.numeric(PCT_LOWINC), 1),
+    PCT_RURAL = round(as.numeric(PCT_RURAL), 1),
+    PCT_UNEMPLY = round(as.numeric(PCT_UNEMPLY), 1),
+    LEAD_ALE_COUNT_5YRS = round(as.numeric(LEAD_ALE_COUNT_5YRS), 0),
+    LEAD_SAMPLE_COUNT_5YRS = round(as.numeric(LEAD_SAMPLE_COUNT_5YRS), 0),
+  NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL = round(as.numeric(NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL), 0),
+  NUM_LEAD_SERVICE_LINES = round(as.numeric(NUM_LEAD_SERVICE_LINES), 0),
+  NUM_LEAD_STATUS_UNKNOWN_SL = round(as.numeric(NUM_LEAD_STATUS_UNKNOWN_SL), 0),
+  NUM_NONLEAD_SERVICE_LINES = round(as.numeric(NUM_NONLEAD_SERVICE_LINES), 0),
+  TOTAL_NUM_SERVICE_LINES_REPORTED = round(as.numeric(TOTAL_NUM_SERVICE_LINES_REPORTED), 0),
+  VIOLATIONS_NON_RTC_COUNT = round(as.numeric(VIOLATIONS_NON_RTC_COUNT), 0),
+  HBV_NON_RTC_COUNT = round(as.numeric(HBV_NON_RTC_COUNT), 0),
+  LCR_VIOL_NONRTC_COUNT = round(as.numeric(LCR_VIOL_NONRTC_COUNT), 0),
+  FEA_VIOL_NONRTC_COUNT= round(as.numeric(FEA_VIOL_NONRTC_COUNT), 0),
+  HBV_COUNT_QTRS_5YRS = round(as.numeric(HBV_COUNT_QTRS_5YRS), 0),
+  LCR_VIOL_COUNT_QTRS_5YRS = round(as.numeric(LCR_VIOL_COUNT_QTRS_5YRS), 0),
+  MR_VIOL_COUNT_QTRS_5YRS = round(as.numeric(MR_VIOL_COUNT_QTRS_5YRS), 0),
+  DWSRF_AWARDS_10YRS_COUNT = round(as.numeric(DWSRF_AWARDS_10YRS_COUNT), 0)
+  )
+
 # Export ----
 ## With geometry ----
 currentDate <- as.character(Sys.Date())
@@ -234,15 +260,15 @@ currentDate <- str_replace_all(currentDate, "-", "_")
 # Export data based on feature class type
 
 # Identify unique feature classes
-geom_types <- unique(st_geometry_type(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs))
+geom_types <- unique(st_geometry_type(final_CWS_dataset_set_digits))
 
 #Separate sf based on feature classes
 for (i in seq_along(geom_types)) {
   GEOM_TYPE <- geom_types[i]
   subset_sf <-
-    final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs[st_geometry_type(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs) == GEOM_TYPE,]
+    final_CWS_dataset_set_digits[st_geometry_type(final_CWS_dataset_set_digits) == GEOM_TYPE,]
   assign(paste0("CWS_Shape_Export", GEOM_TYPE),
-         final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs[st_geometry_type(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs) == GEOM_TYPE,])
+         final_CWS_dataset_set_digits[st_geometry_type(final_CWS_dataset_set_digits) == GEOM_TYPE,])
 }
 
 #Write individual sf based on feature class
@@ -285,7 +311,7 @@ st_write(
 
 ## Without Geometry ----
 
-PWS_Complete_Table <- st_drop_geometry(final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs)
+PWS_Complete_Table <- st_drop_geometry(final_CWS_dataset_set_digits)
 
 write.csv(PWS_Complete_Table, here(
   paste0(

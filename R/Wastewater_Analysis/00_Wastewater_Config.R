@@ -2,8 +2,12 @@ library("zoo")
 library("dplyr")
 
 # Values updated quarterly
-FYQTR_NPDES = "20254"
-npdes_set_fyqtr = as.yearqtr("2025 Q4")
+FYQTR_NPDES = "20261"
+npdes_set_fyqtr = as.yearqtr("2026 Q1")
+
+# MONITORING_PERIOD_END_DATE = "30-SEP-22" #"30-JUN-22"
+# SINGLE_EVENT_VIOLATION_DATE = "01-NOV-22" #'01-JUL-22'
+# SETTLEMENT_ENTERED_DATE = "30-SEP-20" #'30-JUN-2020'
 
 MONITORING_PERIOD_END_DATE = "30-SEP-22" #"30-JUN-22"
 SINGLE_EVENT_VIOLATION_DATE = "01-NOV-22" #'01-JUL-22'

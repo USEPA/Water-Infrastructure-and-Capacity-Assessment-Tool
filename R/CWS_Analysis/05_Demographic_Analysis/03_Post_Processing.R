@@ -59,9 +59,22 @@ PWS_with_demographic_data_ranges <-
                             breaks,
                             labels)
 
+# Convert numb values to a 0-100 scale ----
+PWS_with_demographic_data_ranges_pct <- PWS_with_demographic_data_ranges %>%
+  mutate(
+    pct_lowinc =  pct_lowinc * 100 ,
+    pct_hsed = pct_hsed * 100 ,
+    pct_unemply = pct_unemply * 100 ,
+    pct_rural = pct_rural * 100,
+  ) %>%
+  mutate_at(
+    pct_cols,
+    ~ round(., digits = 2)
+  )
+
 # Export Data ----
 write.csv(
-  PWS_with_demographic_data_ranges,
+  PWS_with_demographic_data_ranges_pct,
   here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data.csv"),
   row.names = FALSE
 )
