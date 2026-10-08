@@ -13,4 +13,5 @@ names(tribe_codes_lower48) <-
   gsub(" ", "_", names(tribe_codes_lower48))
 
 # Export -----------------
-write.csv(tribe_codes_lower48, here("Input_Data/Locational/Tribe/tribe_codes_lower48.csv"), row.names = FALSE, append=FALSE)
+# write.csv(tribe_codes_lower48, here("Input_Data/Locational/Tribe/tribe_codes_lower48.csv"), row.names = FALSE, append=FALSE)
+saveRDS(tribe_codes_lower48, here("R/CWS_Analysis/01_Import_Data/Other_Area_Data/Tribal/Temp_Outputs/tribe_codes_lower48.rds"))

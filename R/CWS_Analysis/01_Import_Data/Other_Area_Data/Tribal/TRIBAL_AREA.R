@@ -24,7 +24,9 @@ AI_AN_Res_point <- arc_select(flayer.AIAN) %>%
 
 # Export Data ---------------
 ## Off Reservation Trust Area  ---------------
-st_write(Off_Res_LT_point, here("Input_Data/Locational/Tribe/Off_Reservation_Tribal_Areas.gdb"), append = FALSE)
+# st_write(Off_Res_LT_point, here("Input_Data/Locational/Tribe/Off_Reservation_Tribal_Areas.gdb"), append = FALSE)
+saveRDS(Off_Res_LT_point, here("R/CWS_Analysis/01_Import_Data/Other_Area_Data/Tribal/Temp_Outputs/Off_Reservation_Tribal_Areas.rds"))
 
 ## Reservation  ---------------
-st_write(AI_AN_Res_point, here("Input_Data/Locational/Tribe/Reservation_Tribal_Areas.gdb"), append = FALSE)
+# st_write(AI_AN_Res_point, here("Input_Data/Locational/Tribe/Reservation_Tribal_Areas.gdb"), append = FALSE)
+saveRDS(AI_AN_Res_point, here("R/CWS_Analysis/01_Import_Data/Other_Area_Data/Tribal/Temp_Outputs/Reservation_Tribal_Areas.rds"))
