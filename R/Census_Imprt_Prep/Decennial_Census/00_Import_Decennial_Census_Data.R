@@ -1,6 +1,9 @@
 # This script imports decennial data directly from IPUMS, NHGIS (https://www.nhgis.org/)
-# Instructions for importing from NHGIS: https://assets.ipums.org/_files/webinars/slides/nhgis03-05-24.pdf
 
+# Clear environment
+rm(list = ls())
+
+# Instructions for importing from NHGIS: https://assets.ipums.org/_files/webinars/slides/nhgis03-05-24.pdf
 # The following tables are going to be extracted
 
 # Year:             2020
@@ -43,17 +46,17 @@ nhgis_ds %>%
   select(name, description)
 
 # View detailed metadata
-ds_meta <- get_metadata_nhgis(dataset = "2020_2024_ACS5a")
+ds_meta <- get_metadata_nhgis(dataset = "2020_DHCa")
 
 str(ds_meta, 1)
 
 # Define extract request ----
 nhgis_ext <- define_extract_nhgis(
-  description = "5-Year Data [2020-2024, Block Groups & Larger Areas]",
+  description = "DHC - P & H Tables [Blocks & Larger Areas]",
   datasets = ds_spec(
-    "2020_2024_ACS5a",
-    data_tables = c("B01003", "C17002", "B19013", "B23025", "B25001"),
-    geog_levels = "blck_grp"
+    "2020_DHCa",
+    data_tables = c("P1", "P2", "H1"),
+    geog_levels = "block"
   )
 )
 
@@ -65,12 +68,16 @@ nhgis_ext <- submit_extract(nhgis_ext)
 
 nhgis_ext <- wait_for_extract(nhgis_ext)
 
-# Write an extract to the ACS folder ----
-nhgis_files <- download_extract(nhgis_ext, here(
-  "Input_Data/Census/ACS"
-))
+# Write an extract to the Decennial Census folder ----
+nhgis_files <- download_extract(nhgis_ext, #here(
+  #"Input_Data/Census/ACS"
+  here("R/Census_Imprt_Prep/Decennial_Census/Temp_Outputs")
+)
 
 basename(nhgis_files) # View file name
 
 # Read in files ----
 nhgis_data <- read_nhgis(nhgis_files)
+
+# Export ----
+saveRDS(nhgis_data,here("R/Census_Imprt_Prep/Decennial_Census/Temp_Outputs/2020_DHCa_blk.rds"))

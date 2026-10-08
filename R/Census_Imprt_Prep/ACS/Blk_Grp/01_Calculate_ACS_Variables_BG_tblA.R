@@ -1,4 +1,7 @@
-# This script is used to calculate select ACS variables, percent low income, percent unemployment, percent of population under 5, percent of population under 18, percent housing units that are renter occupied, percent of multi-family housing units that are renter occupied.
+# This script is used to calculate select ACS variables, percent low income, percent unemployment, percent of population under 5, percent of population under 18, percent housing units that are renter occupied, percent multi-family housing units, and median household income.
+
+# Clear environment
+rm(list = ls())
 
 # Load libraries ----
 library(here)
@@ -7,7 +10,8 @@ library(vroom)
 
 # Import Data ----
 ACS_BG_Socioeconomic_Import <-
-  vroom(here("Input_Data/Census/ACS/ACS_TblA_BG/ACS_2020_2024a_BG.csv"))
+  # vroom(here("Input_Data/Census/ACS/ACS_TblA_BG/ACS_2020_2024a_BG.csv"))
+  readRDS(here("R/Census_Imprt_Prep/ACS/Blk_Grp/Temp_Outputs/ACS_2020_2024a_BG.rds"))
 
 # Calculate ACS Variables ----
 ACS_BG_Socioeconomic <- ACS_BG_Socioeconomic_Import %>%
@@ -16,33 +20,27 @@ ACS_BG_Socioeconomic <- ACS_BG_Socioeconomic_Import %>%
       paste0(
         substr(.$GISJOIN, 2, 3),
         substr(.$GISJOIN, 5, 7),
-        substr(.$GISJOIN, 9, 15) #Use GISJOIN to create a census block group FIPS code column
+        substr(.$GISJOIN, 9, 15) # Use GISJOIN to create a census block group FIPS code column
       ),
     LOWINCPCT = (AURNE001 - AURNE008) / AURNE001,
-    #Percent of Population Low Income (Households whose income is less than or equal to 2x the federal poverty level)
+    # Percent of Population Low Income (Households whose income is less than or equal to 2x the federal poverty level)
     UNEMPLYMNTPCT = AUTWE005 / AUTWE003,
-    #Percent of Population 16 years and over unemployed (civilian labor force only),
+    # Percent of Population 16 years and over unemployed (civilian labor force only),
     PCT_POP_U5 = (AUOVE003 + AUOVE027) / AUOVE001,
-    #Percent of population under 5 years old
+    # Percent of population under 5 years old
     PCT_POP_U18 = (
       AUOVE003 + AUOVE004 + AUOVE005 + AUOVE006 + AUOVE027 + AUOVE028 + AUOVE029 +
         AUOVE030
     ) / AUOVE001,
-    #Percent of population under 18 years old
+    # Percent of population under 18 years old
     PCT_POP_62Plus = (
       AUOVE043 + AUOVE044 + AUOVE045 + AUOVE046 + AUOVE047 + AUOVE048 + AUOVE049 +
         AUOVE019 + AUOVE020 + AUOVE021 + AUOVE022 + AUOVE023 + AUOVE024 + AUOVE025
     ) / AUOVE001,
-    #Percent of population 62 years and older
+    # Percent of population 62 years and older
     PCT_HU_RNTR = AUUEE003 / AUUEE001,
-    #Percent of total housing units that are renter occupied
-    PCT_MFHU = (
-      AUVME016 + AUVME017 + AUVME018 + AUVME019 + AUVME020 + AUVME021 + AUVME005 +
-        AUVME006 + AUVME007 + AUVME008 + AUVME009 + AUVME010
-    ) / (
-      AUVME014 + AUVME015 + AUVME016 + AUVME017 + AUVME018 + AUVME019 + AUVME020 + AUVME021 + AUVME003 + AUVME004 + AUVME005 +
-        AUVME006 + AUVME007 + AUVME008 + AUVME009 + AUVME010
-    ) #Percent of total multifamily housing units that are renter occupied
+    # Percent of total housing units that are renter occupied
+    PCT_MFHU = (AUVME005 + AUVME006 + AUVME007 + AUVME008 + AUVME009 + AUVME010 + AUVME016 + AUVME017 + AUVME018 + AUVME019 + AUVME020 + AUVME021) / AUVME001 # Pct of total housing units that are multi-family
   ) %>%
   dplyr::select(
     .,
@@ -70,6 +68,6 @@ ACS_BG_Socioeconomic <- ACS_BG_Socioeconomic_Import %>%
 saveRDS(
   ACS_BG_Socioeconomic,
   here(
-    "R/Census_Imprt_Prep/ACS/Blk_Grp/Outputs/ACS_TblA_BG_ClcdVar.rds"
+    "R/Census_Imprt_Prep/ACS/Blk_Grp/Temp_Outputs/ACS_TblA_BG_ClcdVar.rds"
   )
 )

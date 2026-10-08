@@ -1,4 +1,8 @@
 # This script imports 5-year American Community Survey data directly from IPUMS, NHGIS (https://www.nhgis.org/)
+
+#Clear environment
+rm(list = ls())
+
 # Instructions for importing from NHGIS: https://assets.ipums.org/_files/webinars/slides/nhgis03-05-24.pdf
 
 # The following tables are going to be extracted
@@ -18,7 +22,7 @@
 
 # 7. B25003: Tenure (gives total housing units that are renter vs owner occupied)
 
-# 8. B25032: Tenure by Units in Structure (gives total multi-family housing units that are renter vs owner occupied)
+# 8. B25032: Tenure by Units in Structure, Occupied Housing Units 
 
 # Load Libraries ----
 library(ipumsr)
@@ -65,7 +69,7 @@ nhgis_ext <- submit_extract(nhgis_ext)
 nhgis_ext <- wait_for_extract(nhgis_ext)
 
 # Write an extract to the ACS folder ----
-nhgis_files <- download_extract(nhgis_ext, here("Input_Data/Census/ACS/ACS_TblA_BG"))
+nhgis_files <- download_extract(nhgis_ext, here("R/Census_Imprt_Prep/ACS/Blk_Grp/Temp_Outputs"))
 
 basename(nhgis_files) # View file name
 
@@ -73,6 +77,8 @@ basename(nhgis_files) # View file name
 nhgis_data <- read_nhgis(nhgis_files)
 
 # Export ----
-write.csv(nhgis_data,
-  here("Input_Data/Census/ACS/ACS_TblA_BG/ACS_2020_2024a_BG.csv"),
-  row.names = FALSE)
+# write.csv(nhgis_data,
+#   here("Input_Data/Census/ACS/ACS_TblA_BG/ACS_2020_2024a_BG.csv"),
+#   row.names = FALSE)
+
+saveRDS(nhgis_data,here("R/Census_Imprt_Prep/ACS/Blk_Grp/Temp_Outputs/ACS_2020_2024a_BG.rds"))
