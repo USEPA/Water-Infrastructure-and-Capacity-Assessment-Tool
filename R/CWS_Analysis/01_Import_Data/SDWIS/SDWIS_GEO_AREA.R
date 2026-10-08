@@ -1,3 +1,6 @@
+# Clear all visible objects from the global workspace
+rm(list = ls())
+
 library(here)
 library(vroom)
 library(dplyr)
@@ -22,5 +25,4 @@ SDWIS_GEOGRAPHIC_AREA <- sqlQuery(
 ) 
 
 # Export ----
-#write.csv(SDWIS_GEOGRAPHIC_AREA, here("Input_Data/SDWIS/SDWIS_GEOGRAPHIC_AREA.csv"), row.names = FALSE)
 saveRDS(SDWIS_GEOGRAPHIC_AREA, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_GEOGRAPHIC_AREA.rds"))

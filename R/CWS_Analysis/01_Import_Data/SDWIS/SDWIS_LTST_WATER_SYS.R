@@ -1,3 +1,6 @@
+# Clear environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(RODBC)
@@ -21,9 +24,9 @@ SDFW_CWS_ACTIVE_ATTRIBUTES <- sqlQuery(
   "SELECT * FROM LTST_WATER_SYSTEM WHERE PWS_TYPE_CODE = 'CWS' AND pws_activity_code = 'A'"
 )
 
-# Formatting----
+# Formatting ----
 
-## Convert codes to full descriptions----
+## Convert codes to full descriptions ----
 ### Set up query ----
 SDWA_ref_codes_query <- paste("SELECT *
   FROM REF_CODE_VALUE
@@ -74,7 +77,7 @@ SDFW_CWS_ACTIVE_ATTRIBUTES <-
     all.x = TRUE
   ) %>% dplyr::select(-c("GW_SW_CODE")) %>% rename("SOURCE_WATER_TYPE" = "VALUE_DESCRIPTION")
 
-### Population category code----
+### Population category code ----
 
 # Convert Pop Cat 5 Code to character from integer to allow merging in the following chunk
 SDFW_CWS_ACTIVE_ATTRIBUTES$POP_CAT_5_CODE <-
@@ -108,10 +111,4 @@ SDFW_CWS_ACTIVE_ATTRIBUTES <-
   )  %>% dplyr::select(-c("PRIMACY_AGENCY_CODE")) %>% rename("PRIMACY_AGENCY" = "VALUE_DESCRIPTION")
 
 # Export----
-# write.csv(
-#   SDFW_CWS_ACTIVE_ATTRIBUTES,
-#   here("Input_Data/SDWIS", "SDWIS_CWS_ACTIVE_ATTRIBUTES.csv"),
-#   row.names = FALSE
-# )
-
 saveRDS(SDFW_CWS_ACTIVE_ATTRIBUTES, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_CWS_ACTIVE_ATTRIBUTES.rds"))

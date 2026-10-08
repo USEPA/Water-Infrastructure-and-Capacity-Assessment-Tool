@@ -1,3 +1,6 @@
+# Clear environment
+rm(list = ls())
+
 library(here)
 library(RODBC)
 library(dplyr)
@@ -28,5 +31,4 @@ ECHO_FAC_DETAILS$DFR_URL <- paste0("
 https://echo.epa.gov/detailed-facility-report?fid=", ECHO_FAC_DETAILS$REGISTRY_ID) 
 
 # Export ----
-#write.csv(ECHO_FAC_DETAILS, here("Input_Data/ECHO", "ECHO_FAC_DETAILS_PWS.csv"), row.names = FALSE)
 saveRDS(ECHO_FAC_DETAILS, here("R/CWS_Analysis/01_Import_Data/ECHO/Temp_Outputs/ECHO_FAC_DETAILS_PWS.rds"))

@@ -53,8 +53,4 @@ SDWA_site_visits <-
   filter(., SS_VISIT_FYQTR <= j)
 
 # Export ----
-# write.csv(SDWA_site_visits,
-#           here("Input_Data/SDWIS", "SDWA_san_survey.csv"),
-#           row.names = FALSE)
-
 saveRDS(SDWA_site_visits, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWA_san_survey.rds"))

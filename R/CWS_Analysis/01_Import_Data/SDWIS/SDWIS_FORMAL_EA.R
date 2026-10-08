@@ -1,3 +1,6 @@
+# Clear all visible objects from the global workspace
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(RODBC)

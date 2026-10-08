@@ -4,10 +4,10 @@ library("dplyr")
 # Values updated quarterly
 
 ## SDWIS
-COMPL_PER_BEGIN_DATE_SELECT <- as.Date("01-APR-21", "%d-%b-%y", tz = "") %>% 
+COMPL_PER_BEGIN_DATE_SELECT <- as.Date("01-JUL-21", "%d-%b-%y", tz = "") %>% 
   format(., "%d-%b-%y") # Start date for compliance period to include in analysis (5yr window)
-j <- as.yearqtr("2026 Q2")
-k <- "2026Q2"
+j <- as.yearqtr("2026 Q3")
+k <- "2026Q3"
 
 # Values updated annually
 ## SRF
