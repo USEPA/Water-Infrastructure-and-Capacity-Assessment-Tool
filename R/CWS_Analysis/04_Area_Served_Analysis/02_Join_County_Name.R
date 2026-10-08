@@ -1,21 +1,25 @@
+# This script joins SDWIS Geographic Area (area served) data with Census tigris file to populate missing county name data using ANSI Entity Code.
+
+rm(list = ls()) # Clear environment
+
 library(here)
 library(vroom)
 library(dplyr)
 library(stringr)
 library(tigris)
 
-# This script joins SDWIS Geographic Area (area served) data with Census tigris file to populate missing county name data using ANSI ENtity Code.
+#Import Data ----
 
-# Import Data -------------
+# SDWIS area served data with tribe names ----
+SDWIS_AREA_SERVED_TRIBE_NAME <- #vroom(here("R/CWS_Analysis/04_Area_Served_Analysis/01_SDWIS_GEOGRAPHIC_AREA_TRIBAL.csv"))
+  readRDS(here("R/CWS_Analysis/04_Area_Served_Analysis/Temp_Outputs/01_SDWIS_GEOGRAPHIC_AREA_TRIBAL.rds"))
 
-# SDWIS area served data with tribe names
-SDWIS_AREA_SERVED_TRIBE_NAME <- vroom(here("R/CWS_Analysis/04_Area_Served_Analysis/01_SDWIS_GEOGRAPHIC_AREA_TRIBAL.csv"))
-
-# Import FIPS codes for states and territories
+# Import FIPS codes for states and territories  ----
 # Get the list of all state and territory FIPS codes
 state_fips <- unique(fips_codes$state)[1:57]  
 
-# Function to get county data 
+# Import counties ----
+# Function to get county data
 get_county_data <- function(state) {
   counties(state = state, cb = TRUE)  # Use cb = TRUE for a smaller, cartographic boundary
 }
@@ -28,7 +32,7 @@ all_counties_df <- bind_rows(all_counties) %>%
   mutate(county_code = substr(GEOID, start = 3, stop = 5)) %>%
   st_drop_geometry(.)
 
-# Merge SDWIS Geographic Area data with County Names -----------------
+# Merge SDWIS Geographic Area data with County Names ----
 SDWIS_county_detail_included <-
   merge(
     SDWIS_AREA_SERVED_TRIBE_NAME,
@@ -62,4 +66,6 @@ SDWIS_areas_consolidated <- SDWIS_county_detail_included %>%
   ) 
 
 # Export ----
-write.csv(SDWIS_areas_consolidated, here("R/CWS_Analysis/04_Area_Served_Analysis/02_SDWIS_GEOGRAPHIC_AREA_COUNTY.csv"), row.names = FALSE)
+# write.csv(SDWIS_areas_consolidated, here("R/CWS_Analysis/04_Area_Served_Analysis/02_SDWIS_GEOGRAPHIC_AREA_COUNTY.csv"), row.names = FALSE)
+
+saveRDS(SDWIS_areas_consolidated, here("R/CWS_Analysis/04_Area_Served_Analysis/Temp_Outputs/02_SDWIS_GEOGRAPHIC_AREA_COUNTY.rds"))

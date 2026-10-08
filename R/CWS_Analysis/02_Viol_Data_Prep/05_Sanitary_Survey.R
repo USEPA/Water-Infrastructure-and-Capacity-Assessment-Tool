@@ -1,16 +1,21 @@
+# This script identifies the date of a CWS's most recent complete sanitary survey and, identifies significant deficiencies or sanitary defects on the most recent sanitary survey
+
+rm(list = ls()) # Clear environment
+
 library(here)
 library(vroom)
 library(dplyr)
 
-# This script identifies the date of a CWS's most recent complete sanitary survey and, identifies significant deficiencies or sanitary defects on the most recent sanitary survey
+# Sanitary Survey Most Recent Date ----
 
-# Sanitary Survey Most Recent Date -----------
-# Identify the date of the most recent complete sanitary survey
-SDWA_SS_Most_Recent <- vroom(here("Input_Data/SDWIS/SDWA_san_survey.csv")) %>%
+## Identify the date of the most recent complete sanitary survey  ----
+
+SDWA_SS_Most_Recent <- #vroom(here("Input_Data/SDWIS/SDWA_san_survey.csv")) %>%
+  readRDS(here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWA_san_survey.rds")) %>%
   arrange(PWSID, desc(VISIT_DATE)) %>%
   distinct(PWSID, .keep_all = TRUE)
 
-# Identify any significant deficiencies or sanitary defects  -----------
+## Identify any significant deficiencies or sanitary defects ----
 # Create vector of infrastructure related survey elements (columns)
 INFRASTRUCTURE_SURVEY_ELEMENTS <- c("SOURCE_WATER_EVAL_CODE", "SECURITY_EVAL_CODE", "PUMPS_EVAL_CODE", "OTHER_EVAL_CODE",
                                     "COMPLIANCE_EVAL_CODE", "DATA_VERIFICATION_EVAL_CODE", "TREATMENT_EVAL_CODE",
@@ -37,7 +42,7 @@ Sig_Def_San_Defct <- function(data, columns_to_check) {
 SDWA_SS_Most_Recent$SS_SIGD_OR_SAND_INFRA_YN <- Sig_Def_San_Defct(SDWA_SS_Most_Recent, INFRASTRUCTURE_SURVEY_ELEMENTS)
 SDWA_SS_Most_Recent$SS_SIGD_OR_SAND_CAP_YN <- Sig_Def_San_Defct(SDWA_SS_Most_Recent, CAPACITY_SURVEY_ELEMENTS)
   
-# Select columns
+# Select columns ----
 SDWA_SS_Most_Recent <- SDWA_SS_Most_Recent %>%
   select(
     PWSID,
@@ -59,5 +64,7 @@ SDWA_SS_Most_Recent <- SDWA_SS_Most_Recent %>%
     FINANCIAL_EVAL_CODE
   )
 
-# Export
-write.csv(SDWA_SS_Most_Recent, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/SDWA_SS_Most_Recent.csv"), row.names = FALSE)
+# Export ----
+# write.csv(SDWA_SS_Most_Recent, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/SDWA_SS_Most_Recent.csv"), row.names = FALSE)
+
+saveRDS(SDWA_SS_Most_Recent, here("R/CWS_Analysis/02_Viol_Data_Prep/Temp_Outputs/SDWA_SS_Most_Recent.rds"))

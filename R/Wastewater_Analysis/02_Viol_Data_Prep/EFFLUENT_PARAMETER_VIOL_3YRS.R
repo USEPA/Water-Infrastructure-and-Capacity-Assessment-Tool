@@ -1,12 +1,16 @@
+# This script identifies all effluent parameters associated with effluent violations in the last 12 qtrs. 
+
+rm(list = ls()) # Clear environment
+
 library(vroom)
 library(dplyr)
 library(here)
 
-# This script identifies all effluent parameters associated with effluent violations in the last 12 qtrs. 
-
 # Import data ----
-EFF_VIOL <- vroom(here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"))
-EFF_PARAM <- vroom(here("Input_Data/NPDES/effluent_crosswalk.csv"))
+EFF_VIOL <- #vroom(here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"))
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_E90_EFFLUENT_VIOLATIONS.rds"))
+EFF_PARAM <- #vroom(here("Input_Data/NPDES/effluent_crosswalk.csv"))
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/effluent_crosswalk.rds"))
 
 # Run analysis ----
 
@@ -62,9 +66,12 @@ summary(E90_Violations_Param_12Qtrs$EFF_VIOLATIONS_3YR_COUNT)
 hist(E90_Violations_Param_12Qtrs$EFF_VIOLATIONS_3YR_COUNT)
 
 # Export ----
-vroom_write(
-  E90_Violations_Param_12Qtrs,
-  here(
-    "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/E90_Violations_Param_12Qtrs.csv"
-  ), delim = ","
-)
+# vroom_write(
+#   E90_Violations_Param_12Qtrs,
+#   here(
+#     "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/E90_Violations_Param_12Qtrs.csv"
+#   ), delim = ","
+# )
+
+
+saveRDS(E90_Violations_Param_12Qtrs,here("R/Wastewater_Analysis/02_Viol_Data_Prep/Temp_Outputs/E90_Violations_Param_12Qtrs.rds"))

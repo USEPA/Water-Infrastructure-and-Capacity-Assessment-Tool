@@ -1,1 +1,11 @@
 *.gpkg filter=lfs diff=lfs merge=lfs -text
+*.shp filter=lfs diff=lfs merge=lfs -text
+*.dbf filter=lfs diff=lfs merge=lfs -text
+*POTW_Crswlks_df.rds filter=lfs diff=lfs merge=lfs -text
+*Complete_POTW_Crswlk.rds filter=lfs diff=lfs merge=lfs -text
+*final_CWS_dataset_with_DWSRF.rds filter=lfs diff=lfs merge=lfs -text
+*combined_CWS_result.rds filter=lfs diff=lfs merge=lfs -text
+*2020_DHCa_blk.rds filter=lfs diff=lfs merge=lfs -text
+*2020_DHCa_blk_ClcdVar.rds filter=lfs diff=lfs merge=lfs -text
+*CWS_SAB.rds filter=lfs diff=lfs merge=lfs -text
+*PWS_Blks_CrsWlk.rds filter=lfs diff=lfs merge=lfs -text

@@ -16,10 +16,7 @@ R/**/*.csv
 R/**/*.gpkg
 .ini
 schema.ini
-MIGRATIONTEST_Clean Water_Pop Weighted Calcs_00.R
-MIGRATIONTEST_Drinking Water_Pop Weighted Calcs_00.R
-MIGRATIONTEST_DW_ECHO_Exporter_Data_Manipulation_05_drinking water.Rmd
-MIGRATIONTEST_ECHO_Exporter_Data_Manipulation_04_Clean Water.Rmd
+Prod_Maps/
 R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Buyer_Seller.cpg
 R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Buyer_Seller.dbf
 R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Buyer_Seller.dbf.xml
@@ -31,3 +28,7 @@ R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.shp.xml
 R/CWS_Analysis/01_Import_Data/SABs/Water_System_Boundaries/Final.shx
 /Sandbox
 **/Archive/
+**/*.zip
+R/Wastewater_Analysis/POTW_Blk_Crswlk/Pro_Crsswlk_Files/.ipynb_checkpoints
+R/Wastewater_Analysis/POTW_Blk_Crswlk/Pro_Crsswlk_Files/POTW_Crosswalk_Temp.gdb
+R/Wastewater_Analysis/POTW_Blk_Crswlk/Pro_Crsswlk_Files/POTW_Crosswalk.gdb

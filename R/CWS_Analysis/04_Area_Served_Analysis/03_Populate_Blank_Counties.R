@@ -1,20 +1,22 @@
+# This script populates county name information using available City Served data from SDWIS Geographic Area data, and matches it with place data from the tigris package.
+
+rm(list = ls()) # Clear environment
+
 library(here)
 library(vroom)
 library(dplyr)
 library(stringr)
 library(tigris)
 
-# This script populates county name information using available City Served data from SDWIS Geographic Area data, and matches it with place data from the tigris package.
-
-# Import Data -------------
+# Import Data ----
 
 # SDWIS area served data with tribe names
-SDWIS_AREA_SERVED_COUNTY <- vroom(here("R/CWS_Analysis/04_Area_Served_Analysis/02_SDWIS_GEOGRAPHIC_AREA_COUNTY.csv"))
-
+SDWIS_AREA_SERVED_COUNTY <- # vroom(here("R/CWS_Analysis/04_Area_Served_Analysis/02_SDWIS_GEOGRAPHIC_AREA_COUNTY.csv"))
+  readRDS(here("R/CWS_Analysis/04_Area_Served_Analysis/Temp_Outputs/02_SDWIS_GEOGRAPHIC_AREA_COUNTY.rds"))
 
 # Retrieve census place data for states with missing county data ----
 QACHECK_Missing_County <- SDWIS_AREA_SERVED_COUNTY %>%
-  filter(is.na(COUNTY_SERVED)) %>%
+  filter(is.na(COUNTY_SERVED) | COUNTY_SERVED == "") %>%
   group_by(PRIMACY_AGENCY_CODE) %>%
   summarise(
     count = n(),
@@ -114,11 +116,12 @@ SDWIS_areas_city_county_match <- # Merge dataframe with tigris file on populated
   ) %>%  # Merge the above output with tigris file on counties places
   mutate(
     COUNTY_SERVED = case_when(
-      is.na(COUNTY_SERVED) ~ paste(NAME),
+      is.na(COUNTY_SERVED) | COUNTY_SERVED == "" ~ paste(NAME),
       TRUE ~ COUNTY_SERVED
     ), # Populate the county served field if it is blank and if there is a county name available from the previous merge
     COUNTY_SERVED = case_when(
       COUNTY_SERVED == "NA" ~ paste("Data not available"),
+      #is.na(COUNTY_SERVED) | COUNTY_SERVED == "" ~ paste("Data not available"),
       TRUE ~ COUNTY_SERVED
     )
   ) 
@@ -133,4 +136,6 @@ QACHECK_missing_county_remain <- SDWIS_areas_city_county_match %>%
   ) # Check that all counties have been populated
 
 # Export ----
-write.csv(SDWIS_areas_city_county_match, here("R/CWS_Analysis/04_Area_Served_Analysis/03_SDWIS_AREA_SERVED_POPULATED_CNTY.csv"), row.names = FALSE)
+# write.csv(SDWIS_areas_city_county_match, here("R/CWS_Analysis/04_Area_Served_Analysis/03_SDWIS_AREA_SERVED_POPULATED_CNTY.csv"), row.names = FALSE)
+
+saveRDS(SDWIS_areas_city_county_match, here("R/CWS_Analysis/04_Area_Served_Analysis/Temp_Outputs/03_SDWIS_AREA_SERVED_POPULATED_CNTY.rds"))

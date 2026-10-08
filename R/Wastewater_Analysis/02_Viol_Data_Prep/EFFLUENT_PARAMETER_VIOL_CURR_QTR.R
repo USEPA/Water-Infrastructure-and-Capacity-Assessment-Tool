@@ -1,14 +1,18 @@
+# This script identifies all effluent parameters associated with effluent violations in the current quarter. 
+
+rm(list = ls()) # Clear environment
+
 library(vroom)
 library(dplyr)
 library(here)
 
-# This script identifies all effluent parameters associated with effluent violations in the current quarter. 
-
 # Import data and configuration variables----
 source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
 
-EFF_VIOL <- vroom(here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"))
-EFF_PARAM <- vroom(here("Input_Data/NPDES/effluent_crosswalk.csv"))
+EFF_VIOL <- #vroom(here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"))
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_E90_EFFLUENT_VIOLATIONS.rds"))
+EFF_PARAM <- #vroom(here("Input_Data/NPDES/effluent_crosswalk.csv"))
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/effluent_crosswalk.rds"))
 
 # Add a column to categorize/group effluent parameters into a effluent violation category
 EFF_VIOL_WITH_PARAM <-
@@ -58,9 +62,11 @@ summary(EFF_VIOL_WITH_PARAM_Q12$EFF_VIOLATIONS_COUNT)
 hist(EFF_VIOL_WITH_PARAM_Q12$EFF_VIOLATIONS_COUNT)
 
 # Export
-vroom_write(
-  EFF_VIOL_WITH_PARAM_Q12,
-  here(
-    "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/EFF_VIOL_WITH_PARAM_Q12.csv"
-  ), delim = ","
-)
+# vroom_write(
+#   EFF_VIOL_WITH_PARAM_Q12,
+#   here(
+#     "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/EFF_VIOL_WITH_PARAM_Q12.csv"
+#   ), delim = ","
+# )
+
+saveRDS(EFF_VIOL_WITH_PARAM_Q12,here("R/Wastewater_Analysis/02_Viol_Data_Prep/Temp_Outputs/EFF_VIOL_WITH_PARAM_Q12.rds"))

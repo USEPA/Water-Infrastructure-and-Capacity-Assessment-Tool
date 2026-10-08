@@ -1,12 +1,15 @@
+# This script counts the number of Single Event Violations by NPDES ID open as of the most current reporting period AND the number of quarters in the last 3-yrs with at least 1 Single Event Violation.
+
+rm(list = ls()) # Clear environment
+
 library(vroom)
 library(dplyr)
 library(here)
 library(zoo)
 
-# This script counts the number of Single Event Violations by NPDES ID open as of the most current reporting period AND the number of quarters in the last 3-yrs with at least 1 Single Event Violation.
-
 # Import data ----
-SEV_NPDES <- vroom(here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"))
+SEV_NPDES <- #vroom(here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"))
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_SE_VIOLATIONS.rds"))
 
 # Run analysis  ----
 
@@ -36,16 +39,20 @@ SEV_3YRS_COUNT <-
 
 # Export ----
 
-vroom_write(
-  SEV_COUNT_3YRS_OPEN,
-  here(
-    "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/SEV_COUNT_3YRS_OPEN.csv"
-  ), delim = ","
-)
+# vroom_write(
+#   SEV_COUNT_3YRS_OPEN,
+#   here(
+#     "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/SEV_COUNT_3YRS_OPEN.csv"
+#   ), delim = ","
+# )
 
-vroom_write(
-  SEV_3YRS_COUNT,
-  here(
-    "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/SEV_3YRS_COUNT.csv"
-  ), delim = ","
-)
+saveRDS(SEV_COUNT_3YRS_OPEN,here("R/Wastewater_Analysis/02_Viol_Data_Prep/Temp_Outputs/SEV_COUNT_3YRS_OPEN.rds"))
+
+# vroom_write(
+#   SEV_3YRS_COUNT,
+#   here(
+#     "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/SEV_3YRS_COUNT.csv"
+#   ), delim = ","
+# )
+
+saveRDS(SEV_3YRS_COUNT,here("R/Wastewater_Analysis/02_Viol_Data_Prep/Temp_Outputs/SEV_3YRS_COUNT.rds"))

@@ -1,11 +1,15 @@
+# This script counts the number of FEA (Formal Enforcement Action) by NPDES ID in the last 5 years.
+
+rm(list = ls()) # Clear environment
+
 library(vroom)
 library(dplyr)
 library(here)
 
-# This script counts the number of FEA (Formal Enforcement Action) by NPDES ID in the last 5 years.
-
 # Import data ----
-FEA_NPDES <- vroom(here("Input_Data/NPDES/NPDES_FORMAL_ENFORCEMENT_ACTIONS.csv"))
+FEA_NPDES <- #vroom(here("Input_Data/NPDES/NPDES_FORMAL_ENFORCEMENT_ACTIONS.csv"))
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_FORMAL_ENFORCEMENT_ACTIONS.rds"))
+
 
 # Group enforcement actions by NPDES ID  and Count the Number of FEA in the last 5yrs----
 FEA_COUNT_5YRS <-
@@ -18,9 +22,11 @@ FEA_COUNT_5YRS <-
 hist(FEA_COUNT_5YRS$FORMAL_ENF_ACT_5YR_COUNT)
 
 # Export ----
-vroom_write(
-  FEA_COUNT_5YRS,
-  here(
-    "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/FEA_COUNT_5YRS.csv"
-  ), delim = ","
-)
+# vroom_write(
+#   FEA_COUNT_5YRS,
+#   here(
+#     "R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/FEA_COUNT_5YRS.csv"
+#   ), delim = ","
+# )
+
+saveRDS(FEA_COUNT_5YRS,here("R/Wastewater_Analysis/02_Viol_Data_Prep/Temp_Outputs/FEA_COUNT_5YRS.rds"))

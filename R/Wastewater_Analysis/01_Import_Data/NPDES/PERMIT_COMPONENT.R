@@ -1,3 +1,8 @@
+# This script imports permit component data
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(lubridate)
@@ -5,10 +10,6 @@ library(dplyr)
 library(vroom)
 library(DBI)
 library(odbc)
-
-# This script is used to import single event violation data in the last 3-years/12-qtrs
-
-# This script imports permit component data
 
 # Create db connections and import environment variables ----
 db <- Sys.getenv("ECHO_DB")
@@ -30,5 +31,7 @@ echo_CWA_permit_components <- dbGetQuery(con, echo_CWA_permit_components_query) 
   rename(NPDES_ID = EXTERNAL_PERMIT_NMBR) 
 
 # Export ----
-vroom_write(echo_CWA_permit_components,
-          here("Input_Data/NPDES/NPDES_PERMIT_COMPONENTS.csv"), delim = ",")
+# vroom_write(echo_CWA_permit_components,
+#           here("Input_Data/NPDES/NPDES_PERMIT_COMPONENTS.csv"), delim = ",")
+
+saveRDS(echo_CWA_permit_components,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_PERMIT_COMPONENTS.rds"))

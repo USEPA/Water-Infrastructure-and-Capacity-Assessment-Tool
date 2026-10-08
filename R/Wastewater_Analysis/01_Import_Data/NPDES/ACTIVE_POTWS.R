@@ -1,11 +1,14 @@
+# This script is used to import the base universe of POTWs, importing all active POTWs
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(RODBC)
 library(lubridate)
 library(dplyr)
 library(vroom)
-
-# This script is used to import the base universe of POTWs, importing all active POTWs
 
 # Create a connection to ECHO -------------------------
 db <- Sys.getenv("ECHO_DB")
@@ -29,4 +32,5 @@ ECHO_ACTIVE_POTW_QUERY <- paste(
 ECHO_ACTIVE_POTW <- sqlQuery(channel_ECHO, ECHO_ACTIVE_POTW_QUERY)
 
 # Export  ---------------------------
-write.csv(ECHO_ACTIVE_POTW, here("Input_Data/NPDES", "ECHO_ACTIVE_POTW.csv"), row.names = FALSE)
+# write.csv(ECHO_ACTIVE_POTW, here("Input_Data/NPDES", "ECHO_ACTIVE_POTW.csv"), row.names = FALSE)
+saveRDS(ECHO_ACTIVE_POTW,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/ECHO_ACTIVE_POTW.rds"))

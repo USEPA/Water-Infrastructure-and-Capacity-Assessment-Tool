@@ -1,3 +1,8 @@
+# This script is used to import single event violation data in the last 3-years/12-qtrs
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(lubridate)
@@ -5,8 +10,6 @@ library(dplyr)
 library(vroom)
 library(DBI)
 library(odbc)
-
-# This script is used to import single event violation data in the last 3-years/12-qtrs
 
 # Create db connections and import environment variables ----
 db <- Sys.getenv("ECHO_DB")
@@ -55,4 +58,6 @@ echo_NPDES_SE_VIOLATIONS_FORMATTED <- echo_NPDES_SE_VIOLATIONS_FORMATTED %>%
   filter(., FYQTR >  npdes_set_fyqtr - 3 & FYQTR <= npdes_set_fyqtr)
 
 # Export ----
-vroom_write(echo_NPDES_SE_VIOLATIONS_FORMATTED, here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"), delim = ",")
+# vroom_write(echo_NPDES_SE_VIOLATIONS_FORMATTED, here("Input_Data/NPDES/NPDES_SE_VIOLATIONS.csv"), delim = ",")
+
+saveRDS(echo_NPDES_SE_VIOLATIONS_FORMATTED,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_SE_VIOLATIONS.rds"))

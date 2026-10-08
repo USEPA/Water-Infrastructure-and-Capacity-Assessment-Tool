@@ -1,13 +1,16 @@
+# This script is used to import SDWA Site Visit dataset, and filter for sanitary surveys:
+# SNSV	Sanitary Survey, Complete
+# L1SS	Level 1 Assessment and Sanitary Survey
+# L2SS	Level 2 Assessment and Sanitary Survey
+
+# Clear environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(RODBC)
 library(lubridate)
 library(dplyr)
-
-# This script is used to import SDWA Site Visit dataset, and filter for sanitary surveys:
-# SNSV	Sanitary Survey, Complete
-# L1SS	Level 1 Assessment and Sanitary Survey
-# L2SS	Level 2 Assessment and Sanitary Survey
 
 # Create a connection to SDWIS ----
 db_sdwis <- Sys.getenv("SDWIS_DB")
@@ -50,6 +53,8 @@ SDWA_site_visits <-
   filter(., SS_VISIT_FYQTR <= j)
 
 # Export ----
-write.csv(SDWA_site_visits,
-          here("Input_Data/SDWIS", "SDWA_san_survey.csv"),
-          row.names = FALSE)
+# write.csv(SDWA_site_visits,
+#           here("Input_Data/SDWIS", "SDWA_san_survey.csv"),
+#           row.names = FALSE)
+
+saveRDS(SDWA_site_visits, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWA_san_survey.rds"))

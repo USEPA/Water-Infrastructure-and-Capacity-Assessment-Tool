@@ -13,4 +13,5 @@ options(scipen = 999)
 blocks_pws <- read.csv("https://media.githubusercontent.com/media/USEPA/ORD_SAB_Model/refs/heads/main/Version_History/3_0/Census_Tables/Blocks_V_3_0.csv")
 
 # Export ----
-write.csv(blocks_pws, here("Input_Data/Census/PWS-Crosswalk/PWS_Blks_CrsWlk.csv"), row.names = FALSE)
+#write.csv(blocks_pws, here("Input_Data/Census/PWS-Crosswalk/PWS_Blks_CrsWlk.csv"), row.names = FALSE)
+saveRDS(blocks_pws, here("R/CWS_Analysis/01_Import_Data/SABs/Temp_Outputs/PWS_Blks_CrsWlk.rds"))

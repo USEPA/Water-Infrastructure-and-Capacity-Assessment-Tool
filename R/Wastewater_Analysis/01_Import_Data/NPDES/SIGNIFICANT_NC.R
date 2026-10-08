@@ -1,11 +1,14 @@
+# This script is used to import significant noncompliance data in the current quarter and last 3-years/12-qtrs.
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(lubridate)
 library(dplyr)
 library(vroom)
 library(RODBC)
-
-# This script is used to import significant noncompliance data in the current quarter and last 3-years/12-qtrs.
 
 # Set-up Query ----
 
@@ -35,4 +38,6 @@ POTWS_WITH_SNC_DISTINCT <- POTWS_WITH_SNC %>%
   rename(NPDES_ID = SOURCE_ID)
 
 # Export ----
-write.csv(POTWS_WITH_SNC_DISTINCT, here("Input_Data/NPDES/POTWS_WITH_SNC.CSV"), row.names = FALSE)
+# write.csv(POTWS_WITH_SNC_DISTINCT, here("Input_Data/NPDES/POTWS_WITH_SNC.CSV"), row.names = FALSE)
+
+saveRDS(POTWS_WITH_SNC_DISTINCT,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/POTWS_WITH_SNC.rds"))

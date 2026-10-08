@@ -1,9 +1,12 @@
+# This script is used download ECHO Facility Details data
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(RODBC)
 library(dplyr)
 library(vroom)
-
-# This script is used download ECHO Facility Details data
 
 ##IF ORACLE QUERY TAKES TOO LONG TO RUN, DOWNLOAD FILE FROM ECHO DATA DOWNLOADS, INSTEAD. ALSO, DOUBLE CHECK V_ECHO_EXPORTER13_DL OR V_ECHO_EXPORTER##
 
@@ -47,4 +50,5 @@ ECHO_FAC_DETAILS <- sqlQuery(
 )
 
 # Export  ---------------------------
-vroom_write(ECHO_FAC_DETAILS, here("Input_Data/ECHO/ECHO_FAC_DETAILS_POTW.csv"), delim = ",")
+# vroom_write(ECHO_FAC_DETAILS, here("Input_Data/ECHO/ECHO_FAC_DETAILS_POTW.csv"), delim = ",")
+saveRDS(ECHO_FAC_DETAILS,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/ECHO_FAC_DETAILS_POTW.rds"))

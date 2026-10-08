@@ -1,21 +1,26 @@
+# This script joins the combined violation and lagoon data with CWSRF data
+
+# Clear environment
+rm(list = ls())
+
 library(vroom)
 library(here)
 library(dplyr)
 
-# This script joins the combined violation and lagoon data with CWSRF data
-
 # Import data ----
 
 # Import combined violation/lagoon dataset
-POTW_VIOL_LAGOON <- vroom(here("R/Wastewater_Analysis/05_Join_Analysis_Components/NPDES_VIOL_LAGOON.csv"))
+POTW_VIOL_LAGOON <- # vroom(here("R/Wastewater_Analysis/05_Join_Analysis_Components/NPDES_VIOL_LAGOON.csv"))
+  readRDS(here("R/Wastewater_Analysis/05_Join_Analysis_Components/Temp_Outputs/NPDES_VIOL_LAGOON.rds"))
 
 # Import CWSRF history data and group the data by NPDES ID
-CWSRF_history <- vroom(here("Input_Data/CWSRF/CWSRF_History.csv"))%>%
+CWSRF_history <- # vroom(here("Input_Data/CWSRF/CWSRF_History.csv"))%>%
+  readRDS(here("R/Wastewater_Analysis/01_Import_Data/CWSRF/Temp_Outputs/CWSRF_History.rds")) %>%
   rename("CWSRF_Hardship_Community" = "Disadvantaged_Assistance")
 
 CWSRF_history_grouped <- CWSRF_history %>%
   arrange(desc(Initial_Agreement_Date)) %>% # Sort data in date descending order to enable correct selection of disadvantaged assistance value
-  group_by(NPDES_ID) %>% 
+  group_by(NPDES_ID) %>%
   summarise(
     CWSRF_AWARDS_10YRS_COUNT = n(),
     CWSRF_Hardship_Community = first(CWSRF_Hardship_Community) # Paste the hardship community value, based on the latest/newest agreement
@@ -25,7 +30,7 @@ CWSRF_history_grouped <- CWSRF_history %>%
 
 # Specify label breaks that will be used for the count of DWSRF agreements
 breaks_zero_twentyplus <- c(-Inf, 0, 5, 10, 20, Inf)
-labels_zero_twentyplus <- c("0","1-5","6-10","11-20",">20")
+labels_zero_twentyplus <- c("0", "1-5", "6-10", "11-20", ">20")
 
 # Join datasets
 POTW_VIOL_LAGOON_DWSRF <-
@@ -46,9 +51,11 @@ POTW_VIOL_LAGOON_DWSRF <-
       breaks = breaks_zero_twentyplus,
       labels = labels_zero_twentyplus,
       include.lowest = TRUE,
-      right = TRUE  
-    ) #Create ranges
+      right = TRUE
+    ) # Create ranges
   )
 
 # Export ----
-vroom_write(POTW_VIOL_LAGOON_DWSRF, here("R/Wastewater_Analysis/05_Join_Analysis_Components/POTW_VIOL_LAGOON_CWSRF_OUT.csv"), delim = ",")
+# vroom_write(POTW_VIOL_LAGOON_DWSRF, here("R/Wastewater_Analysis/05_Join_Analysis_Components/POTW_VIOL_LAGOON_CWSRF_OUT.csv"), delim = ",")
+
+saveRDS(POTW_VIOL_LAGOON_DWSRF, here("R/Wastewater_Analysis/05_Join_Analysis_Components/Temp_Outputs/POTW_VIOL_LAGOON_CWSRF_OUT.rds"))

@@ -108,8 +108,10 @@ SDFW_CWS_ACTIVE_ATTRIBUTES <-
   )  %>% dplyr::select(-c("PRIMACY_AGENCY_CODE")) %>% rename("PRIMACY_AGENCY" = "VALUE_DESCRIPTION")
 
 # Export----
-write.csv(
-  SDFW_CWS_ACTIVE_ATTRIBUTES,
-  here("Input_Data/SDWIS", "SDWIS_CWS_ACTIVE_ATTRIBUTES.csv"),
-  row.names = FALSE
-)
+# write.csv(
+#   SDFW_CWS_ACTIVE_ATTRIBUTES,
+#   here("Input_Data/SDWIS", "SDWIS_CWS_ACTIVE_ATTRIBUTES.csv"),
+#   row.names = FALSE
+# )
+
+saveRDS(SDFW_CWS_ACTIVE_ATTRIBUTES, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_CWS_ACTIVE_ATTRIBUTES.rds"))

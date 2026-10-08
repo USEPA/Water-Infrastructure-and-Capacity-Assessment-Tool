@@ -1,3 +1,5 @@
+rm(list = ls()) # Clear environment
+
 library(here)
 library(zoo)
 library(RODBC)
@@ -88,4 +90,6 @@ SDWIS_VIOLATIONS_FRMTD <-
   )  %>% dplyr::select(-c("VIOLATION_CATEGORY_CODE")) %>% rename("VIOLATION_CATEGORY" = "VALUE_DESCRIPTION")
 
 # Export ---- 
-write.csv(SDWIS_VIOLATIONS_FRMTD, here("Input_Data/SDWIS/SDWIS_VIOLATIONS_BASE.csv"), row.names = FALSE)
+# write.csv(SDWIS_VIOLATIONS_FRMTD, here("Input_Data/SDWIS/SDWIS_VIOLATIONS_BASE.csv"), row.names = FALSE)
+
+saveRDS(SDWIS_VIOLATIONS_FRMTD, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_VIOLATIONS_BASE.rds"))

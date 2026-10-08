@@ -1,13 +1,16 @@
+# This script is used to post-process the merged enforcement and compliance data including converting code values to full descriptions, populating blank fields, and add count range fields, and renaming select columns. 
+
+rm(list = ls()) # Clear environment
+
 library(dplyr)
 library(vroom)
 library(here)
 library(tidyr)
 library(stringr)
 
-# This script is used to post-process the merged enforcement and compliance data including converting code values to full descriptions, populating blank fields, and add count range fields, and renaming select columns. 
-
 # Import data ----
-NPDES_CONSOLIDATED_ENF_COMPL_PREP <- vroom(here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/NPDES_CONSOLIDATED_ENF_COMPL.csv"))
+NPDES_CONSOLIDATED_ENF_COMPL_PREP <- #vroom(here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/NPDES_CONSOLIDATED_ENF_COMPL.csv"))
+  readRDS(here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/Temp_Outputs/NPDES_CONSOLIDATED_ENF_COMPL.rds"))
 
 # Import configuration variables
 source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
@@ -226,7 +229,7 @@ labels_zero_15 <- cut_and_revalue_multiple(NPDES_ZERO_20, range_zero_15, breaks_
 ## Remove blank spaces from DFR URL ----
 labels_zero_15$DFR_URL <- str_replace_all(labels_zero_15$DFR_URL, " ", "")
 
-# Check for blanks and NA Values --------------------
+# Check for blanks and NA Values ----
 blank_count <-
   as.matrix(as.character(labels_zero_15 == ""))
 
@@ -241,7 +244,7 @@ summary_df <-
 
 print(summary_df)
 
-# Export ---------------------
-write.csv(labels_zero_15, here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/NPDES_ENF_COMPL_FINAL_OUT.csv"), row.names = FALSE)
+# Export ----
+# write.csv(labels_zero_15, here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/NPDES_ENF_COMPL_FINAL_OUT.csv"), row.names = FALSE)
 
-  
+saveRDS(labels_zero_15,here("R/Wastewater_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/Temp_Outputs/NPDES_ENF_COMPL_FINAL_OUT.rds"))

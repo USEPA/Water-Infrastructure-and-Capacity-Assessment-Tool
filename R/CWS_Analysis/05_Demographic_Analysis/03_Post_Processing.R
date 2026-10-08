@@ -1,24 +1,33 @@
+# This script calculates percent and percent range fields.
+
+# Clear environment
+rm(list = ls())
+
 library(dplyr)
 library(vroom)
 library(here)
 
-# This script calculates percent and percent range fields.
-
-# Import data ----------
-PWS_Weighted_Outputs <- vroom(here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Weighted_Demog_Data.csv"))
+# Import data----
+PWS_Weighted_Outputs <-
+  # vroom(here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Weighted_Demog_Data.csv"))
+  readRDS(("R/CWS_Analysis/05_Demographic_Analysis/Temp_Outputs/PWS_Weighted_Demog_Data.rds"))
 
 # Specify columns for which ranges will be calculated
 pct_cols <-
   c(
     "pct_lowinc",
     "pct_rural",
-    "pct_hsed",
-    "pct_unemply"
+    "pct_unemply",
+    "pct_U5",
+    "pct_U18",
+    "pct_62plus",
+    "pct_HU_rntr",
+    "pct_MFHU"
   )
 
 # Specify data breaks
-breaks = c(-Inf, 0, .10, .20, .30, .40, .50, .60, .70, .80, .90, Inf)
- 
+breaks <- c(-Inf, 0, .10, .20, .30, .40, .50, .60, .70, .80, .90, Inf)
+
 # Create data labels
 labels <- c(
   "(-Inf,0]" = "0%",
@@ -36,11 +45,11 @@ labels <- c(
 
 cut_columns_to_new_labels <-
   function(df, cols_to_cut, breaks, labels, suffix = "_range") {
-    #Iterate over specified columns
+    # Iterate over specified columns
     for (col in cols_to_cut) {
-      #Create new columns
+      # Create new columns
       new_col_name <- paste0(col, suffix)
-      #Apply cut function to each column using the common breaks
+      # Apply cut function to each column using the common breaks
       df[[new_col_name]] <-
         base::cut(
           df[[col]],
@@ -54,18 +63,25 @@ cut_columns_to_new_labels <-
 
 # Apply the function
 PWS_with_demographic_data_ranges <-
-  cut_columns_to_new_labels(PWS_Weighted_Outputs,
-                            pct_cols,
-                            breaks,
-                            labels)
+  cut_columns_to_new_labels(
+    PWS_Weighted_Outputs,
+    pct_cols,
+    breaks,
+    labels
+  )
 
 # Convert numb values to a 0-100 scale ----
 PWS_with_demographic_data_ranges_pct <- PWS_with_demographic_data_ranges %>%
   mutate(
-    pct_lowinc =  pct_lowinc * 100 ,
-    pct_hsed = pct_hsed * 100 ,
-    pct_unemply = pct_unemply * 100 ,
+    pct_lowinc = pct_lowinc * 100,
+    # pct_hsed = pct_hsed * 100 ,
+    pct_unemply = pct_unemply * 100,
     pct_rural = pct_rural * 100,
+    pct_U5 = pct_U5 * 100,
+    pct_U18 = pct_U18 * 100,
+    pct_62plus = pct_62plus * 100,
+    pct_HU_rntr = pct_HU_rntr * 100,
+    pct_MFHU = pct_MFHU * 100
   ) %>%
   mutate_at(
     pct_cols,
@@ -73,8 +89,10 @@ PWS_with_demographic_data_ranges_pct <- PWS_with_demographic_data_ranges %>%
   )
 
 # Export Data ----
-write.csv(
-  PWS_with_demographic_data_ranges_pct,
-  here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data.csv"),
-  row.names = FALSE
-)
+# write.csv(
+#   PWS_with_demographic_data_ranges_pct,
+#   here("R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data.csv"),
+#   row.names = FALSE
+# )
+
+saveRDS(PWS_with_demographic_data_ranges_pct, here("R/CWS_Analysis/05_Demographic_Analysis/Temp_Outputs/PWS_Final_Weighted_Demographic_Data.rds"))

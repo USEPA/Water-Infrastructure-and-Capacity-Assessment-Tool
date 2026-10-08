@@ -1,3 +1,8 @@
+# This script performs final cleaning operations prior to .shp export
+
+# Clear environment
+rm(list = ls())
+
 library(vroom)
 library(dplyr)
 library(here)
@@ -5,11 +10,10 @@ library(sf)
 library(tigris)
 library(stringr)
 
-# This script performs final cleaning operations prior to .shp export
-
 # Import data ----
 # Import combined CWS dataset (with geometries)
-final_CWS_dataset_with_DWSRF <- st_read(here("R/CWS_Analysis/06_Join_Analysis_Components/final_CWS_dataset_with_DWSRF.gpkg")) 
+final_CWS_dataset_with_DWSRF <- readRDS(here("R/CWS_Analysis/06_Join_Analysis_Components/Temp_Outputs/final_CWS_dataset_with_DWSRF.rds"))
+  # st_read(here("R/CWS_Analysis/06_Join_Analysis_Components/final_CWS_dataset_with_DWSRF.gpkg")) 
 
 # Final cleaning operations ----
 
@@ -45,12 +49,12 @@ final_CWS_dataset_with_DWSRF_final_cols <-
       "PWSID",
       "REGISTRY_ID",
       "EPA_REGION",
-      "ZIP_CODE_SERVED", #previous ZIP_CODE_SERVED_SDWIS
-      "CITY_SERVED", #previous CITY_SERVED_SDWIS
-      "COUNTY_SERVED", #previous COUNTY_SERVED_SDWIS
-      "TRIBAL_NAME", #previous TRIBE_SERVED_SDWIS
+      "ZIP_CODE_SERVED", 
+      "CITY_SERVED", 
+      "COUNTY_SERVED", 
+      "TRIBAL_NAME",
       "TRIBAL_CODE",
-      "ANSI_ENTITY_CODE", #new
+      "ANSI_ENTITY_CODE",
       "PRIMACY_TYPE",
       "PRIMACY_AGENCY",
       "PWS_TYPE",
@@ -75,20 +79,20 @@ final_CWS_dataset_with_DWSRF_final_cols <-
       "LCR_VIOL_COUNT_QTRS_5YRS",
       "LCR_VIOL_COUNT_QTRS_5YRS_RANGE",
       "MR_VIOL_COUNT_QTRS_5YRS",
-      "MR_VIOL_COUNT_QTRS_5YRS_RANGE", #previous MR_VIOL_COUNT_QTRS_RANGE
+      "MR_VIOL_COUNT_QTRS_5YRS_RANGE", 
       "FEA_VIOL_NONRTC_COUNT",
-      "FEA_VIOL_NONRTC_COUNT_RANGE", #previous EA_VIOL_NONRTC_COUNT_RANGE
+      "FEA_VIOL_NONRTC_COUNT_RANGE", 
       "LEAD_ALE_5YRS_YN",
       "LEAD_ALE_COUNT_5YRS",
       "LEAD_ALE_COUNT_5YRS_RANGE" ,
       "LEAD_SAMPLE_COUNT_5YRS",
       "LEAD_SAMPLE_COUNT_5YRS_RANGE",
-      "SL_RPT_STATUS", #Jan 2026 new addition 
-      "NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL", #Jan 2026 new addition  
-      "NUM_LEAD_SERVICE_LINES", #Jan 2026 new addition 
-      "NUM_LEAD_STATUS_UNKNOWN_SL", #Jan 2026 new addition 
-      "NUM_NONLEAD_SERVICE_LINES", #Jan 2026 new addition 
-      "TOTAL_NUM_SERVICE_LINES_REPORTED", #Jan 2026 new addition 
+      "SL_RPT_STATUS", 
+      "NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL",
+      "NUM_LEAD_SERVICE_LINES", 
+      "NUM_LEAD_STATUS_UNKNOWN_SL", 
+      "NUM_NONLEAD_SERVICE_LINES", 
+      "TOTAL_NUM_SERVICE_LINES_REPORTED", 
       "ENF_PRIORITY_SYS",
       "OUTSTANDING_PERFORMER",
       "OUTSTANDING_PERFORM_BEGIN_DATE",
@@ -113,14 +117,26 @@ final_CWS_dataset_with_DWSRF_final_cols <-
       "DWSRF_AWARDS_10YRS_COUNT",
       "DWSRF_AWARDS_10YRS_COUNT_RANGE",
       "PWS_MHI_WEIGHT",
+      "PWS_LQI_WEIGHT",  #New Aug2026
       "PCT_LOWINC",
       "PCT_RURAL" ,
-      "PCT_UNEMPLY"  ,
+      "PCT_UNEMPLY"  ,      
+      "PCT_U5",#New Aug2026
+      "PCT_U18",#New Aug2026
+      "PCT_62PLUS",#New Aug2026
+      "PCT_HU_RNTR",#New Aug2026
+      "PCT_MFHU" ,#New Aug2026
       "PCT_LOWINC_RANGE",
       "PCT_RURAL_RANGE",
-      "PCT_UNEMPLY_RANGE",
-      "DFR_URL",
-      "geom" 
+      "PCT_UNEMPLY_RANGE", 
+      "PCT_U5_RANGE",  #New Aug2026                         
+      "PCT_U18_RANGE" ,#New Aug2026                         
+      "PCT_62PLUS_RANGE" ,#New Aug2026                      
+      "PCT_HU_RNTR_RANGE" ,#New Aug2026
+      "PCT_MFHU_RANGE", #New Aug2026
+      "DFR_URL"
+      #,
+      #"geom" #removed Aug2026
     )
   ) %>%
   rename(
@@ -129,11 +145,11 @@ final_CWS_dataset_with_DWSRF_final_cols <-
     "WHOLESALER" = "IS_WHOLESALER_IND",
     "SCHOOL_OR_DAYCARE" = "IS_SCHOOL_OR_DAYCARE_IND",
     "SS_OUTSTAND_PERFORM" = "OUTSTANDING_PERFORMER", 
-    "SS_OUTSTAND_PERFORM_BEGIN_DATE" = "OUTSTANDING_PERFORM_BEGIN_DATE", #previously SS_OUTST_PERFORM_BEGIN_DATE
+    "SS_OUTSTAND_PERFORM_BEGIN_DATE" = "OUTSTANDING_PERFORM_BEGIN_DATE", 
     "SS_DATE_MOST_RECENT" = "VISIT_DATE",
-    "TRIBE_SERVED" = "TRIBAL_NAME", #previous TRIBE_SERVED_SDWIS,
+    "TRIBE_SERVED" = "TRIBAL_NAME", 
     "BIA_TRIBE_CODE" = "TRIBAL_CODE",
-    "STATE_DWSRF_DAC" = "DISADVANTAGED_ASSISTANCE" #previously DISADVANTAGED_ASSISTANCE
+    "STATE_DWSRF_DAC" = "DISADVANTAGED_ASSISTANCE"
   )
 
 ##  Check for blanks and NA values ----
@@ -208,6 +224,26 @@ final_CWS_dataset_with_DWSRF_final_cols_populate_blanks_NAs <-
     PCT_UNEMPLY_RANGE= case_when( 
       (is.na(PCT_UNEMPLY_RANGE))  ~ paste("Data Not Available"),
       TRUE ~  as.character(PCT_UNEMPLY_RANGE)
+    ),
+    PCT_U5_RANGE= case_when( 
+      (is.na(PCT_U5_RANGE))  ~ paste("Data Not Available"),
+      TRUE ~  as.character(PCT_U5_RANGE)
+    ),
+    PCT_U18_RANGE= case_when( 
+      (is.na(PCT_U18_RANGE))  ~ paste("Data Not Available"),
+      TRUE ~  as.character(PCT_U18_RANGE)
+    ),
+    PCT_62PLUS_RANGE= case_when( 
+      (is.na(PCT_62PLUS_RANGE))  ~ paste("Data Not Available"),
+      TRUE ~  as.character(PCT_62PLUS_RANGE)
+    ),
+    PCT_HU_RNTR_RANGE= case_when( 
+      (is.na(PCT_HU_RNTR_RANGE))  ~ paste("Data Not Available"),
+      TRUE ~  as.character(PCT_HU_RNTR_RANGE)
+    )    ,
+    PCT_MFHU_RANGE= case_when( 
+      (is.na(PCT_MFHU_RANGE))  ~ paste("Data Not Available"),
+      TRUE ~  as.character(PCT_MFHU_RANGE)
     )
 )
 
@@ -232,9 +268,15 @@ final_CWS_dataset_set_digits <- final_CWS_dataset_with_DWSRF_final_cols_populate
     POPULATION_SERVED_COUNT = round(as.numeric(POPULATION_SERVED_COUNT), 0),
     SERVICE_CONNECTIONS_COUNT = round(as.numeric(SERVICE_CONNECTIONS_COUNT), 0),
     PWS_MHI_WEIGHT = round(as.numeric(PWS_MHI_WEIGHT), 0),
+    PWS_LQI_WEIGHT = round(as.numeric(PWS_LQI_WEIGHT), 0),
     PCT_LOWINC = round(as.numeric(PCT_LOWINC), 1),
     PCT_RURAL = round(as.numeric(PCT_RURAL), 1),
     PCT_UNEMPLY = round(as.numeric(PCT_UNEMPLY), 1),
+    PCT_U5 = round(as.numeric(PCT_U5), 1),
+    PCT_U18 = round(as.numeric(PCT_U18), 1),
+    PCT_62PLUS = round(as.numeric(PCT_62PLUS), 1),
+    PCT_HU_RNTR = round(as.numeric(PCT_HU_RNTR), 1),
+    PCT_MFHU = round(as.numeric(PCT_MFHU), 1),
     LEAD_ALE_COUNT_5YRS = round(as.numeric(LEAD_ALE_COUNT_5YRS), 0),
     LEAD_SAMPLE_COUNT_5YRS = round(as.numeric(LEAD_SAMPLE_COUNT_5YRS), 0),
   NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL = round(as.numeric(NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL), 0),
@@ -287,8 +329,11 @@ write.csv(CWS_NotMapped, here(
 ))
 
 # Export Polygons
+CWS_Shape_ExportGEOMETRYCOLLECTION <- st_cast(CWS_Shape_ExportGEOMETRYCOLLECTION, "MULTIPOLYGON")
+
 st_write(
-  CWS_Shape_ExportMULTIPOLYGON, here(
+rbind(CWS_Shape_ExportGEOMETRYCOLLECTION,CWS_Shape_ExportPOLYGON),
+  here(
   paste0(
     "Final_Exports_for_App\\Drinking_Water_Files\\",
     "PWS_Polygons_",

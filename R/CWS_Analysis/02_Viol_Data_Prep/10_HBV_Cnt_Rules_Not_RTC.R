@@ -1,13 +1,14 @@
+# This script subsets violations with a compliance period begin date within the last 5-years for HBV that have not RTC'd. The script then groups and counts the number of HBV not RTC'd, and HB Rules Violated by PWSID. Finally, the script removes duplicate rule violations.
+
+rm(list = ls()) # Clear environment
+
 library(here)
 library(zoo)
 library(vroom)
 library(dplyr)
 
-# This script subsets violations with a compliance period begin date within the last 5-years for HBV that have not RTC'd. 
-# The script then groups and counts the number of HBV not RTC'd, and HB Rules Violated by PWSID. 
-# Finally, the script removes duplicate rule violations.
-
-HBV_Cnt_Rules_notRTC <- vroom(here("R/CWS_Analysis/02_Viol_Data_Prep/VIOLATIONS_LESS_THAN_5YRS_CPBD.csv")) %>%
+HBV_Cnt_Rules_notRTC <- #vroom(here("R/CWS_Analysis/02_Viol_Data_Prep/VIOLATIONS_LESS_THAN_5YRS_CPBD.csv")) %>%
+  readRDS(here("R/CWS_Analysis/02_Viol_Data_Prep/Temp_Outputs/VIOLATIONS_LESS_THAN_5YRS_CPBD.rds")) %>%
   filter(.,
          IS_HEALTH_BASED_IND == "Y", # Filter for HBV
          is.na(RTC_DATE))  %>% # Filter for HBV that have not RTCd
@@ -32,4 +33,6 @@ HBV_Cnt_Rules_notRTC$HB_RULES_VIOL_NONRTC <-
   )
 
 # Export
-write.csv(HBV_Cnt_Rules_notRTC, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/HBV_Cnt_Rules_notRTC.csv"), row.names = FALSE)
+# write.csv(HBV_Cnt_Rules_notRTC, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/HBV_Cnt_Rules_notRTC.csv"), row.names = FALSE)
+
+saveRDS(HBV_Cnt_Rules_notRTC, here("R/CWS_Analysis/02_Viol_Data_Prep/Temp_Outputs/HBV_Cnt_Rules_notRTC.rds"))

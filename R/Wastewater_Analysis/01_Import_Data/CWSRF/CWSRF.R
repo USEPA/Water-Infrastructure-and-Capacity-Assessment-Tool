@@ -1,4 +1,8 @@
 # This script is used to import CWSRF Data from OWSRF
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(RODBC)
 library(dplyr)
@@ -208,4 +212,5 @@ CWSRF_Subset <- CWSRF_Raw_Data %>%
   )
 
 # Export dataframe ----
-write.csv(CWSRF_Subset, here("Input_Data/CWSRF/CWSRF_History.csv"), row.names = FALSE)
+# write.csv(CWSRF_Subset, here("Input_Data/CWSRF/CWSRF_History.csv"), row.names = FALSE)
+saveRDS(CWSRF_Subset, here("R/Wastewater_Analysis/01_Import_Data/CWSRF/Temp_Outputs/CWSRF_History.rds"))

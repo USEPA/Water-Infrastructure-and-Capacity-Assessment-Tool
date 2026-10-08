@@ -35,9 +35,10 @@ LSL_Query <- paste0(
 V_LEAD_SERVICE_LINE_DQ <- sqlQuery(channel_SDWIS, LSL_Query)
 
 # Export ----
-write.csv(
-  V_LEAD_SERVICE_LINE_DQ,
-  here("Input_Data/SDWIS/SDWIS_LSL_INVENTORY.csv"),
-  row.names = FALSE
-)
+# write.csv(
+#   V_LEAD_SERVICE_LINE_DQ,
+#   here("Input_Data/SDWIS/SDWIS_LSL_INVENTORY.csv"),
+#   row.names = FALSE
+# )
+saveRDS(V_LEAD_SERVICE_LINE_DQ, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_LSL_INVENTORY.rds"))
 

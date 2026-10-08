@@ -1,3 +1,8 @@
+# This script imports DMR (D80 and D90) violations data for the last 3-years.
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(vroom)
 library(here)
 library(readxl)
@@ -6,8 +11,6 @@ library(zoo)
 library(DBI)
 library(odbc)
 
-# This script imports DMR (D80 and D90) violations data for the last 3-years.
-
 # Import configuration variables
 source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
 
@@ -15,7 +18,8 @@ source(here("R/Wastewater_Analysis/00_Wastewater_Config.R"))
 db <- Sys.getenv("ECHO_DB")
 uid <- Sys.getenv("ECHO_uid")
 pwd <- Sys.getenv("ECHO_pwd")
-monitoring_period_end_date <- Sys.getenv("MONITORING_PERIOD_END_DATE")
+
+#monitoring_period_end_date <- Sys.getenv("MONITORING_PERIOD_END_DATE")
 
 con <- dbConnect(odbc::odbc(),
                  dsn = db,
@@ -27,7 +31,7 @@ DMR_Viol_D90_D80_query <- paste(
   "SELECT NPDES_ID, MONITORING_PERIOD_END_DATE, VIOLATION_CODE 
   FROM ECHO_DFR.V_NDPES_EFF_VIO_DL
 WHERE VIOLATION_CODE IN ('D90', 'D80')
-  AND MONITORING_PERIOD_END_DATE >=","'", monitoring_period_end_date,"'",
+  AND MONITORING_PERIOD_END_DATE >=","'", MONITORING_PERIOD_END_DATE,"'",
   ""
 )
 
@@ -50,4 +54,5 @@ DMR_Viol_D90_D80_3yrs <- DMR_Viol_D90_D80_formatted %>%
   filter(., FYQTR >  npdes_set_fyqtr - 3 & FYQTR <= npdes_set_fyqtr)
 
 # Export ----
-write.csv(DMR_Viol_D90_D80_3yrs, here("Input_Data/NPDES/NPDES_VIOL_D80D90_DMR.csv"), row.names = FALSE)
+# write.csv(DMR_Viol_D90_D80_3yrs, here("Input_Data/NPDES/NPDES_VIOL_D80D90_DMR.csv"), row.names = FALSE)
+saveRDS(DMR_Viol_D90_D80_3yrs,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_VIOL_D80D90_DMR.rds"))

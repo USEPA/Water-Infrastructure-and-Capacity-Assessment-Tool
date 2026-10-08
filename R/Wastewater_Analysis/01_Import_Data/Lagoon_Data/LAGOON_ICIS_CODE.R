@@ -1,6 +1,11 @@
+# This script imports static data identifying POTWs that use lagoons, based on their treatment code.
+
+# Clear all objects from the global environment
+rm(list = ls())
+
+library(here)
 library(readxl)
 
-# This script imports static data identifying POTWs that use lagoons, based on their treatment code.
 lagoons_have_icis_code <-
   read_xlsx(
     here(
@@ -10,6 +15,8 @@ lagoons_have_icis_code <-
   )
 
 # Export ----
-write.csv(lagoons_have_icis_code,
-          here("Input_Data/Lagoon/LAGOON_ICIS_CODE.csv"),
-          row.names = FALSE)
+# write.csv(lagoons_have_icis_code,
+#           here("Input_Data/Lagoon/LAGOON_ICIS_CODE.csv"),
+#           row.names = FALSE)
+
+saveRDS(lagoons_have_icis_code,here("R/Wastewater_Analysis/01_Import_Data/Lagoon_Data/Temp_Outputs/LAGOON_ICIS_CODE.rds"))

@@ -17,4 +17,5 @@ CWS_SAB <- arc_select(flayer.SAB) %>%
     dplyr::select(PWSID, PWS_Name, ORD_SAB)
 
 # Export ----
-st_write(CWS_SAB, here("Input_Data/Locational/SAB", "CWS_SAB.shp"), row.names = FALSE, append=FALSE)
+#st_write(CWS_SAB, here("Input_Data/Locational/SAB", "CWS_SAB.shp"), row.names = FALSE, append=FALSE)
+saveRDS(CWS_SAB, here("R/CWS_Analysis/01_Import_Data/SABs/Temp_Outputs/CWS_SAB.rds"))

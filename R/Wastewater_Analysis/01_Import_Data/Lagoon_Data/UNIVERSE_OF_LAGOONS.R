@@ -1,6 +1,11 @@
+# This script imports static data identifying POTWs that use lagoons, based on the Universe of Lagoon Report.
+
+# Clear all objects from the global environment
+rm(list = ls())
+
+library(here)
 library(readxl)
 
-# This script imports static data identifying POTWs that use lagoons, based on the Universe of Lagoon Report.
 Lagoons_Universe_of_Lagoons <-
   read_xlsx(
     here(
@@ -10,6 +15,8 @@ Lagoons_Universe_of_Lagoons <-
   )
 
 # Export ----
-write.csv(Lagoons_Universe_of_Lagoons,
-          here("Input_Data/Lagoon/LAGOON_UNIV_OF_LAGOONS.csv"),
-          row.names = FALSE)
+# write.csv(Lagoons_Universe_of_Lagoons,
+#           here("Input_Data/Lagoon/LAGOON_UNIV_OF_LAGOONS.csv"),
+#           row.names = FALSE)
+
+saveRDS(Lagoons_Universe_of_Lagoons,here("R/Wastewater_Analysis/01_Import_Data/Lagoon_Data/Temp_Outputs/LAGOON_UNIV_OF_LAGOONS.rds"))

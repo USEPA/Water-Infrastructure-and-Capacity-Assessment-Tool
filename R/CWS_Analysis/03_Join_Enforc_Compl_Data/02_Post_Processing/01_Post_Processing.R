@@ -1,16 +1,17 @@
-library(dplyr)
-library(vroom)
-library(here)
-
 # This script is used to post-process the merged enforcement and compliance data including converting code values to full descriptions, populating blank fields, and add count range fields, and renaming select columns. 
 
-# Import compiled enforcement/compliance dataframe to conduct post-processing ---------------
+rm(list = ls()) # Clear environment
 
-merged_enf_compl_df_import <- vroom(here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/merged_enf_compl_df.csv"))
+library(dplyr)
+library(here)
 
-# Post-processing -----------------
+# Import data ----
 
-## Populate blanks ----------------
+merged_enf_compl_df_import <- #vroom(here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/merged_enf_compl_df.csv")) 
+  readRDS(here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/Temp_Outputs/Joined_enfcmpl_df.rds"))
+
+# Post-processing ----
+## Populate blanks ----
 merged_enf_compl_df_import_pop_blnks <- merged_enf_compl_df_import %>%
   mutate(
     SOURCE_WATER_TYPE = case_when(
@@ -27,8 +28,7 @@ merged_enf_compl_df_import_pop_blnks <- merged_enf_compl_df_import %>%
     )
   )
 
-## Sanitary Survey -----------------
-
+## Sanitary Survey ----
 # Replace survey result code value to full description
 
 # Populate visit reason code with full description
@@ -36,7 +36,8 @@ merged_enf_compl_df_ss_mods <-
   merge(
     merged_enf_compl_df_import_pop_blnks,
     subset(
-      vroom(here("Input_Data/SDWIS/SDWA_REF_CODE_VALUES.csv")),
+      #vroom(here("Input_Data/SDWIS/SDWA_REF_CODE_VALUES.csv")),
+      readRDS(here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWA_REF_CODE_VALUES.rds")),
       VALUE_TYPE == "VISIT_REASON_CODE",
       select = c("VALUE_CODE", "VALUE_DESCRIPTION")
     ),
@@ -107,9 +108,9 @@ SS_replacement_val <-
 merged_enf_compl_df_ss_mods <- merged_enf_compl_df_ss_mods %>%
   mutate_at(vars(survey_columns),  ~ ifelse(is.na(.) | . =="" , SS_replacement_val, .))
 
-## Populate blank values in violation columns ---------------
+## Populate blank values in violation columns ----
 
-### "No HBV Identified" -----------
+### "No HBV Identified"  ----
 replace_val_no_hbv <- c("HB_RULES_VIOL_NONRTC","HB_RULES_VIOLATED_5YRS")
 
 merged_enf_compl_df_hbv_mods <- merged_enf_compl_df_ss_mods %>%
@@ -118,7 +119,7 @@ merged_enf_compl_df_hbv_mods <- merged_enf_compl_df_ss_mods %>%
     ~ ifelse(is.na(.), "No HBV Identified", .)
   )
 
-### Enforcement Priority System ---------------
+### Enforcement Priority System ----
 merged_enf_compl_df_hbv_mods$ENF_PRIORITY_SYS  <-
   ifelse(
     is.na(merged_enf_compl_df_hbv_mods$ENF_PRIORITY_SYS),
@@ -126,7 +127,7 @@ merged_enf_compl_df_hbv_mods$ENF_PRIORITY_SYS  <-
     merged_enf_compl_df_hbv_mods$ENF_PRIORITY_SYS 
   )
 
-### Replace N/A with 0  ---------------
+### Replace N/A with 0 ----
 cols_replace_NA_w_zero <- c(
   "VIOLATIONS_NON_RTC_COUNT",
   "HBV_NON_RTC_COUNT",
@@ -145,7 +146,7 @@ merged_enf_compl_df_zerosreplaced <- merged_enf_compl_df_hbv_mods %>%
     ~ ifelse(is.na(.), 0, .)
   )
 
-### Group violation counts into ranges ---------------
+### Group violation counts into ranges ----
 
 # Function to cut numeric columns into specified breaks and revalue the ranges
 cut_and_revalue_multiple <- function(df, column_names, breaks, labels) {
@@ -173,7 +174,7 @@ cut_and_revalue_multiple <- function(df, column_names, breaks, labels) {
   return(df)
 }
 
-#### Run function -------
+#### Run function ----
 
 # 0-5+
 range_zero_five <- c("LEAD_ALE_COUNT_5YRS","LEAD_SAMPLE_COUNT_5YRS")
@@ -220,67 +221,22 @@ merged_enf_compl_df_zero_twentyplus <- merged_enf_compl_df_zero_twentyplus %>%
     )
   )
 
-## Group LSLI Data ----
-library(BAMMtools)
-
-# Calculate Jenks breaks for 3 classes
-# jenks_breaks_LSL_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$LSL_Cnt, k = 4)
-# jenks_breaks_GRR_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$GRR_Cnt, k = 4)
-# jenks_breaks_Unknown_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$Unknown_Cnt, k = 5)
-# jenks_breaks_NonLead_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$Non_Lead_Cnt, k = 5)
-# jenks_breaks_TotalSL_Cnt <- getJenksBreaks(var = merged_enf_compl_df_zero_twentyplus$Tot_SL, k = 5)
+# Check for blanks and NA Values ----
+# blank_count <-
+#   as.matrix(as.character(merged_enf_compl_df_zero_twentyplus == ""))
 # 
-# summary(merged_enf_compl_df_zero_twentyplus$LSL_Cnt)
-# hist(merged_enf_compl_df_zero_twentyplus$LSL_Cnt)
-# print(jenks_breaks_LSL_Cnt)
-# #0   8114  39323  80595 150767
-# breaks_LSL <- c(-Inf, 0, 8000, 60000, Inf)
-# labels_LSL <- c("0","1-8,000","8,001-60,000",">60,001")
+# blank_counts <-
+#   colSums(blank_count == "")
 # 
-# summary(merged_enf_compl_df_zero_twentyplus$GRR_Cnt)
-# hist(merged_enf_compl_df_zero_twentyplus$GRR_Cnt)
-# print(jenks_breaks_GRR_Cnt)
-# #0  58 229 518 997
-# breaks_grr<- c(-Inf, 0, 60, 200, 500, Inf)
-# labels_grr <- c("0","1-60","61-200","201-500",">500")
+# na_count <-
+#   colSums(is.na(merged_enf_compl_df_zero_twentyplus))
 # 
-# summary(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
-# hist(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
-# print(jenks_breaks_Unknown_Cnt)
-# #0  18372  94340 258104 436341
-# breaks_unknown<- c(-Inf, 0, 18000, 94000, 260000, Inf)
-# labels_unknown <- c("0","1-18,000","18,001-94,000","94,001-260,000",">260,000")
+# summary_df <-
+#   data.frame(Blank_count = blank_counts, NA_Count = na_count)
 # 
-# summary(merged_enf_compl_df_zero_twentyplus$Tot_SL)
-# hist(merged_enf_compl_df_zero_twentyplus$Tot_SL)
-# print(jenks_breaks_NonLead_Cnt)
-# #0  20111 111224 299350 744960
-# breaks_nonlead<- c(-Inf, 0, 20000, 111000, 300000, Inf)
-# labels_nonlead <- c("0","1-20,000","20,001-111,000","111,001-300,000",">300,000")
-# 
-# summary(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
-# hist(merged_enf_compl_df_zero_twentyplus$Unknown_Cnt)
-# print(jenks_breaks_TotalSL_Cnt)
-# #0  23641 126926 336126 820465
-# breaks_totSL<- c(-Inf, 23000, 127000, 336000, 820000, Inf)
-# labels_totSL <- c("0","1-23,000","23,001-127,000","127,001-336,000",">336,000")
+# print(summary_df)
 
-# Check for blanks and NA Values --------------------
-blank_count <-
-  as.matrix(as.character(merged_enf_compl_df_zero_twentyplus == ""))
+# Export ----
+# write.csv(merged_enf_compl_df_zero_twentyplus, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/merged_enf_compl_df_postprocessing_complete.csv"), row.names = FALSE)
 
-blank_counts <-
-  colSums(blank_count == "")
-
-na_count <-
-  colSums(is.na(merged_enf_compl_df_zero_twentyplus))
-
-summary_df <-
-  data.frame(Blank_count = blank_counts, NA_Count = na_count)
-
-print(summary_df)
-
-# Export ---------------------
-write.csv(merged_enf_compl_df_zero_twentyplus, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/merged_enf_compl_df_postprocessing_complete.csv"), row.names = FALSE)
-
-  
+saveRDS(merged_enf_compl_df_zero_twentyplus, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/Temp_Outputs/merged_enf_compl_df_postprocessing_complete.rds"))

@@ -1,3 +1,8 @@
+# This script is used to import the most recent compliance status for POTWs.
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(DBI)
@@ -5,8 +10,6 @@ library(odbc)
 library(lubridate)
 library(dplyr)
 library(vroom)
-
-# This script is used to import the most recent compliance status for POTWs.
 
 # Create db connections and import environment variables ----
 db <- Sys.getenv("ECHO_DB")
@@ -29,5 +32,7 @@ NPDES_CURRENT_COMPL_STAT_QUERY <- paste("SELECT NPDES_ID, YEARQTR, HLRNC
 
 NPDES_CURRENT_COMPL_STAT <- dbGetQuery(con, NPDES_CURRENT_COMPL_STAT_QUERY) 
 
-# Export  ---------------------------
-write.csv(NPDES_CURRENT_COMPL_STAT, here("Input_Data/NPDES/NPDES_LTST_COMPL_STATUS.csv"), row.names = FALSE)
+# Export----
+# write.csv(NPDES_CURRENT_COMPL_STAT, here("Input_Data/NPDES/NPDES_LTST_COMPL_STATUS.csv"), row.names = FALSE)
+
+saveRDS(NPDES_CURRENT_COMPL_STAT,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_LTST_COMPL_STATUS.rds"))

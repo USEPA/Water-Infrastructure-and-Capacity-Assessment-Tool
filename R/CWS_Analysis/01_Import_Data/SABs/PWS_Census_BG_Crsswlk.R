@@ -21,4 +21,5 @@ blockgrp_pws <- read.csv(
   ))
 
 # Export ----
-write.csv(blockgrp_pws, here("Input_Data/Census/PWS-Crosswalk/PWS_BlkGrp_CrsWlk.csv"), row.names = FALSE)
+# write.csv(blockgrp_pws, here("Input_Data/Census/PWS-Crosswalk/PWS_BlkGrp_CrsWlk.csv"), row.names = FALSE)
+saveRDS(blockgrp_pws, here("R/CWS_Analysis/01_Import_Data/SABs/Temp_Outputs/PWS_BlkGrp_CrsWlk.rds"))

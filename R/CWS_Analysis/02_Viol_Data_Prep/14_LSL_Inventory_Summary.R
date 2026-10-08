@@ -1,11 +1,14 @@
+# This script modified column names from the lead service line inventory data frame
+
+rm(list = ls()) # Clear environment
+
 library(here)
 library(dplyr)
 library(vroom)
 
-# This script modified column names from the lead service line inventory data frame
-
-# Import and format data
-LSLI_Base <- vroom(here("Input_Data/SDWIS/SDWIS_LSL_INVENTORY.csv")) %>%
+# Import and format data ----
+LSLI_Base <- #vroom(here("Input_Data/SDWIS/SDWIS_LSL_INVENTORY.csv")) %>%
+  readRDS(here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_LSL_INVENTORY.rds")) %>%
   select(
     "PWSID",
     "NUM_GALVANIZED_REQUIRING_REPLACEMENT_SL",
@@ -41,5 +44,7 @@ LSLI_New_Cols <- LSLI_Base %>%
       )
   )
 
-# Export data
-write.csv(LSLI_New_Cols, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/LSLI_Data.csv"), row.names = FALSE)
+# Export data ----
+# write.csv(LSLI_New_Cols, here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/01_Join_Enf_Compl_Data/LSLI_Data.csv"), row.names = FALSE)
+
+saveRDS(LSLI_New_Cols, here("R/CWS_Analysis/02_Viol_Data_Prep/Temp_Outputs/LSLI_Data.rds"))

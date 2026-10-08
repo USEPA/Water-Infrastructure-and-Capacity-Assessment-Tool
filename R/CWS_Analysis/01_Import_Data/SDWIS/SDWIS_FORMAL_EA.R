@@ -49,8 +49,10 @@ SDFW_Formal_Enforcement_Actions <-
   filter(., FYQTR <= j)
 
 # Export ----
-write.csv(
-  SDFW_Formal_Enforcement_Actions,
-  here("Input_Data/SDWIS", "Formal_Enforcement_Actions.csv"),
-  row.names = FALSE
-)
+# write.csv(
+#   SDFW_Formal_Enforcement_Actions,
+#   here("Input_Data/SDWIS", "Formal_Enforcement_Actions.csv"),
+#   row.names = FALSE
+# )
+
+saveRDS(SDFW_Formal_Enforcement_Actions, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/Formal_Enforcement_Actions.rds"))

@@ -1,3 +1,8 @@
+# This script imports facility information about about permitted POTWs
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(lubridate)
@@ -5,8 +10,6 @@ library(dplyr)
 library(vroom)
 library(DBI)
 library(odbc)
-
-# This script imports facility information about about permitted POTWs
 
 # Create a connection to ECHO ----
 db <- Sys.getenv("ECHO_DB")
@@ -37,6 +40,8 @@ echo_npdes_facility_data_query <- paste(
 echo_npdes_facility_data <- dbGetQuery(con, echo_npdes_facility_data_query)
 
 # Export ----
-vroom_write(echo_npdes_facility_data,
-          here("Input_Data/NPDES/NPDES_FACILITY_INFO.csv"),
-          delim = ",")
+# vroom_write(echo_npdes_facility_data,
+#           here("Input_Data/NPDES/NPDES_FACILITY_INFO.csv"),
+#           delim = ",")
+
+saveRDS(echo_npdes_facility_data,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_FACILITY_INFO.rds"))

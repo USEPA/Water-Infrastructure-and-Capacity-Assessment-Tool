@@ -1,3 +1,6 @@
+# Clear environment
+rm(list = ls())
+
 library(here)
 library(RODBC)
 library(dplyr)
@@ -27,4 +30,6 @@ Greater_than_4log_treatment_query <- paste(
 Greater_than_4log_treatment <- sqlQuery(channel_SDWIS,Greater_than_4log_treatment_query) 
 
 # Export  ---------------------------
-write.csv(Greater_than_4log_treatment, here("Input_Data/SDWIS", "SDWIS_TT.csv"), row.names = FALSE)
+# write.csv(Greater_than_4log_treatment, here("Input_Data/SDWIS", "SDWIS_TT.csv"), row.names = FALSE)
+
+saveRDS(Greater_than_4log_treatment, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWIS_TT.rds"))

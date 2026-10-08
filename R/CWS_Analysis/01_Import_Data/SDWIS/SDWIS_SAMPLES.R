@@ -70,5 +70,5 @@ LCR_SAMPLES <-
   )
 
 # Export ----
-write.csv(LCR_SAMPLES, here("Input_Data/SDWIS", "Lead_Samples.csv"), row.names = FALSE)
-
+#write.csv(LCR_SAMPLES, here("Input_Data/SDWIS", "Lead_Samples.csv"), row.names = FALSE)
+saveRDS(LCR_SAMPLES, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/Lead_Samples.rds"))

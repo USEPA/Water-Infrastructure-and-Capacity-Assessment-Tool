@@ -1,3 +1,8 @@
+# This script joins the combined CWS .shp with DWSRF history data
+
+# Clear environment
+rm(list = ls())
+
 library(vroom)
 library(dplyr)
 library(here)
@@ -5,15 +10,15 @@ library(sf)
 library(tigris)
 library(stringr)
 
-# This script joins the combined CWS .shp with DWSRF history data
-
 # Import data ----
 
 # Import combined CWS dataset (with geometries)
-final_CWS_dataset <- st_read(here("R/CWS_Analysis/06_Join_Analysis_Components/combined_CWS_result.gpkg")) 
+final_CWS_dataset <- readRDS(here("R/CWS_Analysis/06_Join_Analysis_Components/Temp_Outputs/combined_CWS_result.rds"))
+  #st_read(here("R/CWS_Analysis/06_Join_Analysis_Components/combined_CWS_result.gpkg")) 
 
 # Import DWSRF history data and group the data by PWSID
-DWSRF_history <- vroom(here("Input_Data/DWSRF/DWSRF_History.csv")) 
+DWSRF_history <- readRDS(here("R/CWS_Analysis/01_Import_Data/DWSRF/Temp_Outputs/DWSRF_History.rds"))
+ # vroom(here("Input_Data/DWSRF/DWSRF_History.csv")) 
 
 DWSRF_history_grouped <- DWSRF_history %>%
   arrange(desc(Initial_Agreement_Date)) %>% # Sort data in date descending order to enable correct selection of disadvantaged assistance value
@@ -53,8 +58,10 @@ final_CWS_dataset_with_DWSRF <-
   )
 
 # Export ----
-st_write(
-  final_CWS_dataset_with_DWSRF,
-  here("R/CWS_Analysis/06_Join_Analysis_Components/final_CWS_dataset_with_DWSRF.gpkg"),
-  append = FALSE
-)
+# st_write(
+#   final_CWS_dataset_with_DWSRF,
+#   here("R/CWS_Analysis/06_Join_Analysis_Components/final_CWS_dataset_with_DWSRF.gpkg"),
+#   append = FALSE
+# )
+
+saveRDS(final_CWS_dataset_with_DWSRF, here("R/CWS_Analysis/06_Join_Analysis_Components/Temp_Outputs/final_CWS_dataset_with_DWSRF.rds"))

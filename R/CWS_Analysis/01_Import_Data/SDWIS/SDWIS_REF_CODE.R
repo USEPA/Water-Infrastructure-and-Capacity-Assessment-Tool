@@ -1,3 +1,6 @@
+# Clear environment
+rm(list = ls())
+
 library(here)
 library(RODBC)
 
@@ -17,4 +20,6 @@ SDWIS_REF_CODE_QUERY <- paste(
 #Run query
 SDWIS_REF_CODE <- sqlQuery(channel_SDWIS,SDWIS_REF_CODE_QUERY)
 
-write.csv(SDWIS_REF_CODE, here("Input_Data/SDWIS", "SDWA_REF_CODE_VALUES.csv"), row.names = FALSE)
+# write.csv(SDWIS_REF_CODE, here("Input_Data/SDWIS", "SDWA_REF_CODE_VALUES.csv"), row.names = FALSE)
+
+saveRDS(SDWIS_REF_CODE, here("R/CWS_Analysis/01_Import_Data/SDWIS/Temp_Outputs/SDWA_REF_CODE_VALUES.rds"))

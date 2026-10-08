@@ -1,3 +1,8 @@
+# This script is used to import effluent violation data in the last 3-years/12-qtrs
+
+# Clear all objects from the global environment
+rm(list = ls())
+
 library(here)
 library(zoo)
 library(lubridate)
@@ -5,8 +10,6 @@ library(dplyr)
 library(vroom)
 library(DBI)
 library(odbc)
-
-# This script is used to import effluent violation data in the last 3-years/12-qtrs
 
 # Create db connections and import environment variables ----
 db <- Sys.getenv("ECHO_DB")
@@ -57,8 +60,10 @@ echo_npdes_effluent_violations_formatted <- echo_npdes_effluent_violations_forma
   filter(., FYQTR >  npdes_set_fyqtr - 3 & FYQTR <= npdes_set_fyqtr)
 
 # Export ----
-write.csv(
-  echo_npdes_effluent_violations_formatted,
-  here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"),
-  row.names = FALSE
-)
+# write.csv(
+#   echo_npdes_effluent_violations_formatted,
+#   here("Input_Data/NPDES/NPDES_E90_EFFLUENT_VIOLATIONS.csv"),
+#   row.names = FALSE
+# )
+
+saveRDS(echo_npdes_effluent_violations_formatted,here("R/Wastewater_Analysis/01_Import_Data/NPDES/Temp_Outputs/NPDES_E90_EFFLUENT_VIOLATIONS.rds"))
