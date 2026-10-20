@@ -14,8 +14,19 @@ flayer.SAB <- arc_open(furl.SAB)
 # Select layer
 CWS_SAB <- arc_select(flayer.SAB) %>%
     mutate(ORD_SAB = "Y") %>%
-    dplyr::select(PWSID, PWS_Name, ORD_SAB)
+    dplyr::select(PWSID, PWS_Name, ORD_SAB) %>%
+    st_make_valid()
+
+# QA / check geom types ----
+geom_types <- unique(st_geometry_type(CWS_SAB))
+
+# Halt execution if there is more than one unique geometry type or the geometry type is neither POLYGON or MULTIPOLYGON
+if (length(geom_types) > 1 | (geom_types != "POLYGON" & geom_types != "MULTIPOLYGON")) {
+  stop(paste(
+    "Execution stopped: CWS_SAB contains multiple geometry types:", 
+    paste(geom_types, collapse = ", ")
+  ))
+}
 
 # Export ----
-#st_write(CWS_SAB, here("Input_Data/Locational/SAB", "CWS_SAB.shp"), row.names = FALSE, append=FALSE)
 saveRDS(CWS_SAB, here("R/CWS_Analysis/01_Import_Data/SABs/Temp_Outputs/CWS_SAB.rds"))

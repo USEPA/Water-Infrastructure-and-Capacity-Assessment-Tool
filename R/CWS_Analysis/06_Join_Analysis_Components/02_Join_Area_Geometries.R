@@ -12,11 +12,6 @@ library(stringr)
 
 # Import Data ----
 EC_Census_Area_Served <-
-  #   vroom(
-  #   here(
-  #     "R/CWS_Analysis/06_Join_Analysis_Components/ENF_COMPL_CENSUS_AREA_SERVED.csv"
-  #   )
-  # ) %>%
   readRDS(here("R/CWS_Analysis/06_Join_Analysis_Components/Temp_Outputs/ENF_COMPL_CENSUS_AREA_SERVED.rds")) %>%
   mutate(TRIBAL_CODE = str_pad(TRIBAL_CODE, 3, pad = "0"))
 
@@ -30,9 +25,6 @@ QACHECK_county <- EC_Census_Area_Served %>%
 
 # CWS SAB dataset
 CWS_SAB <- readRDS("R/CWS_Analysis/01_Import_Data/SABs/Temp_Outputs/CWS_SAB.rds")
-# st_read(here("Input_Data/Locational/SAB/CWS_SAB.shp")) %>%
-# mutate(ORD_SAB = "Y") %>%
-# dplyr::select(PWSID, ORD_SAB)
 
 # Get the list of all state FIPS codes
 state_territory_fips <- unique(fips_codes$state)[1:57] # Import FIPS codes for all states and US territories

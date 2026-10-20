@@ -11,30 +11,14 @@ library(sf)
 # Import Data ----
 # Enforcement and compliance dataset
 enf_compl_data <-
-  #   vroom(
-  #   here(
-  #     "R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/merged_enf_compl_df_postprocessing_complete.csv"
-  #   )
-  # )
   readRDS(here("R/CWS_Analysis/03_Join_Enforc_Compl_Data/02_Post_Processing/Temp_Outputs/merged_enf_compl_df_postprocessing_complete.rds"))
-
 
 # SDWIS area served data (consolidated)
 SDWIS_Area_Served_Consolidated <-
-  #   vroom(
-  #   here(
-  #     "R/CWS_Analysis/04_Area_Served_Analysis/03_SDWIS_AREA_SERVED_POPULATED_CNTY.csv"
-  #   )
-  # )
   readRDS(here("R/CWS_Analysis/04_Area_Served_Analysis/Temp_Outputs/03_SDWIS_AREA_SERVED_POPULATED_CNTY.rds"))
 
 # Population weighted census data
 Pop_Weighted_Census <-
-  #   vroom(
-  #   here(
-  #     "R/CWS_Analysis/05_Demographic_Analysis/PWS_Final_Weighted_Demographic_Data.csv"
-  #   )
-  # )
   readRDS(here("R/CWS_Analysis/05_Demographic_Analysis/Temp_Outputs/PWS_Final_Weighted_Demographic_Data.rds"))
 
 # Join Data ----
@@ -56,11 +40,4 @@ ENF_COMPL_CENSUS_AREA_SERVED <- merge(enf_compl_data,
   merge(., Pop_Weighted_Census, by = "PWSID", all.x = TRUE) # Merge above output with SAB and census data
 
 # Export Data
-# write.csv(
-#   ENF_COMPL_CENSUS_AREA_SERVED,
-#   here(
-#     "R/CWS_Analysis/06_Join_Analysis_Components/ENF_COMPL_CENSUS_AREA_SERVED.csv"
-#   )
-# )
-
 saveRDS(ENF_COMPL_CENSUS_AREA_SERVED,here("R/CWS_Analysis/06_Join_Analysis_Components/Temp_Outputs/ENF_COMPL_CENSUS_AREA_SERVED.rds"))

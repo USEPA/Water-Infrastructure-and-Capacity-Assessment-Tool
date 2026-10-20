@@ -10,10 +10,12 @@ library(sf)
 library(tigris)
 library(stringr)
 
+# Import config variables
+source(here("R/CWS_Analysis/00_config.R"))
+
 # Import data ----
 # Import combined CWS dataset (with geometries)
 final_CWS_dataset_with_DWSRF <- readRDS(here("R/CWS_Analysis/06_Join_Analysis_Components/Temp_Outputs/final_CWS_dataset_with_DWSRF.rds"))
-  # st_read(here("R/CWS_Analysis/06_Join_Analysis_Components/final_CWS_dataset_with_DWSRF.gpkg")) 
 
 # Final cleaning operations ----
 
@@ -304,6 +306,14 @@ currentDate <- str_replace_all(currentDate, "-", "_")
 # Identify unique feature classes
 geom_types <- unique(st_geometry_type(final_CWS_dataset_set_digits))
 
+# Halt execution if there are more than 2 geometry types
+if (length(geom_types) > 2)  {
+  stop(paste(
+    "Execution stopped: CWS_SAB contains multiple geometry types:", 
+    paste(geom_types, collapse = ", ")
+  ))
+}
+
 #Separate sf based on feature classes
 for (i in seq_along(geom_types)) {
   GEOM_TYPE <- geom_types[i]
@@ -313,31 +323,12 @@ for (i in seq_along(geom_types)) {
          final_CWS_dataset_set_digits[st_geometry_type(final_CWS_dataset_set_digits) == GEOM_TYPE,])
 }
 
-#Write individual sf based on feature class
-
-# Export table of PWS not mapped
-CWS_NotMapped <-
-  st_drop_geometry(CWS_Shape_ExportGEOMETRYCOLLECTION) 
-
-write.csv(CWS_NotMapped, here(
-  paste0(
-    "Final_Exports_for_App\\Drinking_Water_Files\\",
-    "PWS_Polygons_NotMapped_",
-    currentDate,
-    ".csv"
-  )
-))
-
-# Export Polygons
-CWS_Shape_ExportGEOMETRYCOLLECTION <- st_cast(CWS_Shape_ExportGEOMETRYCOLLECTION, "MULTIPOLYGON")
-
-st_write(
-rbind(CWS_Shape_ExportGEOMETRYCOLLECTION,CWS_Shape_ExportPOLYGON),
+st_write(CWS_Shape_ExportMULTIPOLYGON,
   here(
   paste0(
     "Final_Exports_for_App\\Drinking_Water_Files\\",
     "PWS_Polygons_",
-    currentDate,
+    k,
     ".gpkg"
   )),
   append = FALSE
@@ -348,7 +339,7 @@ st_write(
   CWS_Shape_ExportPOINT,
   here(paste0("Final_Exports_for_App\\Drinking_Water_Files\\",
     "PWS_Pts_",
-    currentDate,
+    k,
     ".gpkg"
   )),
   append = FALSE
@@ -362,7 +353,7 @@ write.csv(PWS_Complete_Table, here(
   paste0(
     "Final_Exports_for_App\\Drinking_Water_Files\\",
     "PWS_Complete_Table_",
-    currentDate,
+    k,
     ".csv"
   )
 ))

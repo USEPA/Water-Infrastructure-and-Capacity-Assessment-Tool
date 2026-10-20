@@ -136,6 +136,4 @@ QACHECK_missing_county_remain <- SDWIS_areas_city_county_match %>%
   ) # Check that all counties have been populated
 
 # Export ----
-# write.csv(SDWIS_areas_city_county_match, here("R/CWS_Analysis/04_Area_Served_Analysis/03_SDWIS_AREA_SERVED_POPULATED_CNTY.csv"), row.names = FALSE)
-
 saveRDS(SDWIS_areas_city_county_match, here("R/CWS_Analysis/04_Area_Served_Analysis/Temp_Outputs/03_SDWIS_AREA_SERVED_POPULATED_CNTY.rds"))
